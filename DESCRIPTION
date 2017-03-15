@@ -4,6 +4,8 @@ Version: 0.0.0.9000
 Authors@R: person("Melanie", "Vinton", email = "mcvinton49@gmail.com", role = c("aut", "cre"))
 Description: Collect data from YouTube, organize and clean the data, and create simple visualizations.
     It makes use of the tuber package but simplifies for a specific user.
+URL: http://github.com/Vintonm49/ytcol
+BugReports: http://github.com/Vintonm49/ytcol/issues
 Depends: R (>= 3.3.2)
 License: What license is it under?
 Encoding: UTF-8
