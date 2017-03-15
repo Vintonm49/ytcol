@@ -1,0 +1,16 @@
+Package: ytcol
+Title: Collection and Cleaning of YouTube Data
+Version: 0.0.0.9000
+Authors@R: person("Melanie", "Vinton", email = "mcvinton49@gmail.com", role = c("aut", "cre"))
+Description: Collect data from YouTube, organize and clean the data, and create simple visualizations.
+    It makes use of the tuber package but simplifies for a specific user.
+Depends: R (>= 3.3.2)
+License: What license is it under?
+Encoding: UTF-8
+LazyData: true
+Imports: tuber,
+    plyr,
+    gtools,
+    ggplot2,
+    dplyr
+RoxygenNote: 6.0.1
