@@ -11,7 +11,7 @@
 #' @export
 #'
 
-singleVideoInfo <- function(video_id=NULL){
+yt.singleVideoInfo <- function(video_id=NULL){
   vidStat <- ytcol::getVideoStatsDF(video_id)
   vidDetail <- ytcol::getVideoDetailsDF(video_id)
   vidDetail <- vidDetail[,-c(6:17)]
