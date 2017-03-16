@@ -1,0 +1,9 @@
+---
+title: "README"
+author: "LTC Melanie Vinton"
+date: "March 16, 2017"
+output: html_document
+---
+
+# ARGOS - YouTube
+This package provides data collection, cleaning, and visualization for YouTube data, pulled using the YouTube API.  
