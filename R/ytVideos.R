@@ -24,3 +24,33 @@ yt.singleVideoInfo <- function(video_id=NULL){
   names(vidInfo)[8]<- c("dateTime")
   return(vidInfo)
 }
+
+
+#' Get Related Videos
+#'
+#' Given a video ID, get up to 50 videos that are related.
+#'
+#' @param video_id  String.  Video ID from YouTube.
+#' @return Dataframe with the following variables: videoID, dateTime, channelID, title, description,
+#' channelTitle, and liveBroadcastContent
+#' @export
+yt.related <- function(video_id){
+  df <- tuber::get_related_videos(video_id = video_id)
+  df <- df[,-c(6:14)]
+  names(df)[2] <- "dateTime"
+  return(df)
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
