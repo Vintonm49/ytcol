@@ -18,7 +18,7 @@ yt.search <- function(term=NULL, published_before=NULL, published_after=NULL){
   df <- ytcol::dataframeFromJSON(search_list$items)
 
   repeat{
-    search_vids_sub <- tuber::yt_search(term = term, max_results = 25,
+    search_vids_sub <- tuber::yt_search(term = term,
                                  published_before=published_before,
                                  published_after = published_after,
                                  page_token = token)
@@ -37,4 +37,18 @@ yt.search <- function(term=NULL, published_before=NULL, published_after=NULL){
   df<-df[,c(4,20,21,22,23,33)]
   names(df)[1:2] <- c("videoID", "dateTime")
   return(df)
+}
+
+
+#' Set up YouTube Authorization
+#'
+#' This function uses the yt_oauth() function in the tuber package to
+#' launch a browser that will allow you to authorize the application.
+#'
+#' @param client  String.  Client ID from YouTube OAuth 2.0
+#' @param secret  String.  Client Secret from YouTube OAuth 2.0
+#' @export
+
+yt.oauth <- function(client, secret){
+  tuber::yt_oauth(client, secret)
 }
