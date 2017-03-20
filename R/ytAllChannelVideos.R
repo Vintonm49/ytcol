@@ -72,6 +72,27 @@ yt.AllChannelVideos <- function(channel_id=NULL, published_before=NULL, publishe
 
   token <- channelAct$nextPageToken
 
+  if(nrow(channelList) < 50){
+    df<-cbind(df,channelList)
+    df<-df[,c(4,5,6,7,8,21)]
+    names(df)[1:2] <- c("videoID", "dateTime")
+    df$pullDate <- Sys.time()
+    list_of_video_ids <- as.character(df$videoID)
+    allVideoStats <- plyr::ldply(list_of_video_ids, ytcol::getVideoStatsDF)
+    allVideoDetails <- plyr::ldply(list_of_video_ids, .fun = ytcol::getVideoDetailsDF)
+    allVideoDetails <- allVideoDetails[,-c(6:17)]
+    allVideoDetails <- allVideoDetails[,!names(allVideoDetails) %in% c("thumbnails.maxres.url",
+                                                                       "thumbnails.maxres.width",
+                                                                       "thumbnails.maxres.height")]
+
+
+    allVideoInfo <- cbind(allVideoStats,allVideoDetails)
+    df <- cbind(df, allVideoInfo)
+    df <- df[,-c(8,14:19)]
+    return(df)
+    break
+  }
+
   repeat{
     channelActSub <- tuber::list_channel_activities(filter=c(channel_id = channel_id), part = "contentDetails",
                                              published_before = published_before,
