@@ -1,9 +1,50 @@
 ---
-title: "README"
 author: "LTC Melanie Vinton"
 date: "March 16, 2017"
-output: html_document
 ---
 
 # ARGOS - YouTube
-This package provides data collection, cleaning, and visualization for YouTube data, pulled using the YouTube API.  
+
+This R package provides data collection, cleaning, and visualization for YouTube data, accessed from the YouTube API.  
+
+The first step is to get authorization credentials for a Google App account, such as Gmail or YouTube, at <https://console.developers.google.com/projectselector/apis/credentials>.  Then you need to authenticate using the OAuth 2.0 credentials (client ID and client secret) with the YouTube API using the *yt_oauth* function in the **tuber** package.  Eventually, I will add at function to this package to do this so that the **tuber** package is not necessary.
+
+```{r eval=FALSE}
+yt_oauth(client, secret)
+```
+
+## Functions
+The first thing to understand about YouTube is that it is a collection of videos and channels.  A channel is equivalent to a user or account, and generally includes multiple videos.  Each video has statistics including views, likes, dislikes, favorites, and comments.  Each channel has a channel ID and some have vanity names that replace the channel ID in the URL for that channel.  Every video has a video ID.
+
+### yt.AllChannelVidoes()
+The first function is to collect a list of all the videos from a channel, including the stats for each video.  This function allows you to set a date range for the collection using the "published_before" and "published_after" parameters.  This example collects all the videos from The Late Show with Steven Colbert channel during the first week of March 2017.
+```{r eval=FALSE}
+colbert <- yt.AllChannelVideos(channel_id = "UCMtFAi84ehTSYSE9XoHefig",
+                               published_after = "2017-03-01T00:00:00Z",
+                               published_before = "2017-03-07T00:00:00Z")
+```
+The results include 56 videos and the following information about each video:
+video ID, date-time posted, channel ID, title, description, channel title, date collected, view count, like count, dislike count, favorite count, comment count, tags, and language.
+
+### yt.search()
+This function collect a list of videos related to a search term, regardless of channel, and can be limited by a date range.  This example collects videos related to "golf" in the first week of March 2017.
+```{r echo = FALSE}
+golf <- yt.search(term="golf", 
+                  published_after = "2017-03-01T00:00:00Z",
+                  published_before = "2017-03-07T00:00:00Z")
+```
+The results include 431 videos and the following information about each video:  video ID, date-time posted, channel ID, title, description, and channel title.
+
+
+### yt.singleVideoInfo()
+This function will provide statistics for a video.  The results include video ID, view count, like count, dislike count, favorite count, comment count, date collected, date-time posted, channel ID, title, description, tags, and category ID.  This example collects information on a video featuring Bubba the Bichon Frise.
+```{r echo=FALSE}
+bubba <- yt.singleVideoInfo(video_id = "tgchTz8XjrI")
+```
+
+### yt.related()
+This function collects a list of up to 50 videos that are related to another video. 
+```{r echo=FALSE}
+bubba_rel <- yt.related(video_id = "tgchTz8XjrI")
+```
+
