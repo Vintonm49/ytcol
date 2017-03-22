@@ -36,6 +36,9 @@ yt.search <- function(term=NULL, published_before=NULL, published_after=NULL){
   df<-cbind(df,search_vids)
   df<-df[,c(4,20,21,22,23,33)]
   names(df)[1:2] <- c("videoID", "dateTime")
+  date <- format(Sys.time(),"%Y%m%d_%H%M")
+  write.csv(df, file=paste("./yt_collection/","search_",term,"_!_",date,".csv", sep = ""), row.names = FALSE)
+
   return(df)
 }
 

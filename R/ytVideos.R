@@ -22,6 +22,9 @@ yt.singleVideoInfo <- function(video_id=NULL){
   vidInfo <- vidInfo[,-c(8)]
   names(vidInfo)[1]<- c("videoID")
   names(vidInfo)[8]<- c("dateTime")
+  date <- format(Sys.time(),"%Y%m%d_%H%M")
+  write.csv(df, file=paste("./yt_collection/","videoInfo_",video_id,"_!_",date,".csv", sep = ""), row.names = FALSE)
+
   return(vidInfo)
 }
 
@@ -38,6 +41,9 @@ yt.related <- function(video_id){
   df <- tuber::get_related_videos(video_id = video_id)
   df <- df[,-c(6:14)]
   names(df)[2] <- "dateTime"
+  date <- format(Sys.time(),"%Y%m%d_%H%M")
+  write.csv(df, file=paste("./yt_collection/","related_",video_id,"_!_",date,".csv", sep = ""), row.names = FALSE)
+
   return(df)
 
 }

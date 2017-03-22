@@ -89,6 +89,9 @@ yt.AllChannelVideos <- function(channel_id=NULL, published_before=NULL, publishe
     allVideoInfo <- cbind(allVideoStats,allVideoDetails)
     df <- cbind(df, allVideoInfo)
     df <- df[,-c(8,14:19)]
+    date <- format(Sys.time(),"%Y%m%d_%H%M")
+    write.csv(df, file=paste("./yt_collection/","channel_",channel_id,"_!_",date,".csv", sep = ""), row.names = FALSE)
+    
     return(df)
     break
   }
@@ -130,6 +133,9 @@ yt.AllChannelVideos <- function(channel_id=NULL, published_before=NULL, publishe
   allVideoInfo <- cbind(allVideoStats,allVideoDetails)
   df <- cbind(df, allVideoInfo)
   df <- df[,-c(8,14:19)]
+  date <- format(Sys.time(),"%Y%m%d_%H%M")
+  write.csv(df, file=paste("./yt_collection/","channel_",channel_id,"_!_",date,".csv", sep = ""), row.names = FALSE)
+  
   return(df)
 }
 
