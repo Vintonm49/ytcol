@@ -1,3 +1,29 @@
+#' Get statistics for a video on YouTube
+#' This function takes a YouTube video ID and returns in a dataframe
+#' statistics like views, likes, and dislikes.
+#' @param l video_id  String.
+#' @return A dataframe.
+#' @export
+#' @example getVideoStatsDF(video_id)
+getVideoStatsDF <- function(video_id){
+  stats <- as.data.frame(get_stats(video_id))
+  stats$pullDate <- Sys.time()
+  return(stats)
+}
+
+#' Get details for a video on YouTube
+#' This function takes a YouTube video ID and returns details in a dataframe
+#' like date published, channel ID, title, description, channel title, category ID, and tags.
+#' @param l video_id  String.
+#' @return A dataframe.
+#' @export
+#' @example
+#' getVideoDetailsDF(video_id)
+getVideoDetailsDF <- function(video_id){
+  details <- get_video_details(video_id)
+  return(data.frame(t(unlist(details))))
+}
+
 #' Get Statistics and Details for a Single Video on YouTube
 #'
 #' This function combines the stats and details functions

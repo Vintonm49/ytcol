@@ -1,48 +1,5 @@
-#' Create a dataframe from JSON
-#' This function converts the JSON provided by the YouTube API from the list_channel_activities
-#' function in the tuber package when the part parameter is set to "contentDetails".  The goal is to
-#' capture the video IDs from the channel.
-#'
-#' @param l Dataframe$items from the list_channel_activities()
-#' @return A dataframe of the items
-#' @export
-dataframeFromJSON <- function(l) {
-  l1 <- lapply(l, function(x) {
-    x[sapply(x, is.null)] <- NA
-    unlist(x)
-  })
-  keys <- unique(unlist(lapply(l1, names)))
-  l2 <- lapply(l1, '[', keys)
-  l3 <- lapply(l2, setNames, keys)
-  res <- data.frame(do.call(rbind, l3))
-  return(res)
-}
 
-#' Get statistics for a video on YouTube
-#' This function takes a YouTube video ID and returns in a dataframe
-#' statistics like views, likes, and dislikes.
-#' @param l video_id  String.
-#' @return A dataframe.
-#' @export
-#' @example getVideoStatsDF(video_id)
-getVideoStatsDF <- function(video_id){
-  stats <- as.data.frame(get_stats(video_id))
-  stats$pullDate <- Sys.time()
-  return(stats)
-}
 
-#' Get details for a video on YouTube
-#' This function takes a YouTube video ID and returns details in a dataframe
-#' like date published, channel ID, title, description, channel title, category ID, and tags.
-#' @param l video_id  String.
-#' @return A dataframe.
-#' @export
-#' @examples
-#' getVideoDetailsDF(video_id)
-getVideoDetailsDF <- function(video_id){
-  details <- get_video_details(video_id)
-  return(data.frame(t(unlist(details))))
-}
 
 #' Get list of videos from a YouTube Channel
 #'
@@ -80,7 +37,7 @@ yt.AllChannelVideos <- function(channel_id=NULL, published_before=NULL, publishe
     list_of_video_ids <- as.character(df$videoID)
     allVideoStats <- plyr::ldply(list_of_video_ids, ytcol::getVideoStatsDF)
     allVideoDetails <- plyr::ldply(list_of_video_ids, .fun = ytcol::getVideoDetailsDF)
-    allVideoDetails <- allVideoDetails[,-c(6:17)]
+    allVideoDetails <- allVideoDetails[,-c(3,6:17)]
     allVideoDetails <- allVideoDetails[,!names(allVideoDetails) %in% c("thumbnails.maxres.url",
                                                                        "thumbnails.maxres.width",
                                                                        "thumbnails.maxres.height")]
@@ -91,7 +48,7 @@ yt.AllChannelVideos <- function(channel_id=NULL, published_before=NULL, publishe
     df <- df[,-c(8,14:19)]
     date <- format(Sys.time(),"%Y%m%d_%H%M")
     write.csv(df, file=paste("./yt_collection/","channel_",channel_id,"_!_",date,".csv", sep = ""), row.names = FALSE)
-    
+
     return(df)
     break
   }
@@ -109,7 +66,7 @@ yt.AllChannelVideos <- function(channel_id=NULL, published_before=NULL, publishe
     df <- gtools::smartbind(df, dff)
     channelList <- gtools::smartbind(channelList,channelListSub)
 
-    print(channelActSub$nextPageToken)
+    #print(channelActSub$nextPageToken)
     token <- channelActSub$nextPageToken
     if(is.null(token)){
       break
@@ -124,7 +81,7 @@ yt.AllChannelVideos <- function(channel_id=NULL, published_before=NULL, publishe
   list_of_video_ids <- as.character(df$videoID)
   allVideoStats <- plyr::ldply(list_of_video_ids, ytcol::getVideoStatsDF)
   allVideoDetails <- plyr::ldply(list_of_video_ids, .fun = ytcol::getVideoDetailsDF)
-  allVideoDetails <- allVideoDetails[,-c(6:17)]
+  allVideoDetails <- allVideoDetails[,-c(3,6:17)]
   allVideoDetails <- allVideoDetails[,!names(allVideoDetails) %in% c("thumbnails.maxres.url",
                                                                      "thumbnails.maxres.width",
                                                                      "thumbnails.maxres.height")]
@@ -135,7 +92,7 @@ yt.AllChannelVideos <- function(channel_id=NULL, published_before=NULL, publishe
   df <- df[,-c(8,14:19)]
   date <- format(Sys.time(),"%Y%m%d_%H%M")
   write.csv(df, file=paste("./yt_collection/","channel_",channel_id,"_!_",date,".csv", sep = ""), row.names = FALSE)
-  
+
   return(df)
 }
 

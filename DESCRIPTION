@@ -14,5 +14,6 @@ Imports: tuber,
     plyr,
     gtools,
     ggplot2,
-    dplyr
+    dplyr,
+    httr
 RoxygenNote: 6.0.1
