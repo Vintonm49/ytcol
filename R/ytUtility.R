@@ -64,3 +64,21 @@ yt_check <-
 
     stop("HTTP failure: ", req$status_code, "\n", call. = FALSE)
   }
+
+
+#' Get YouTube Channel ID from Vanity or Legacy Name
+#'
+#' Some YouTube channels have vanity names (sometimes referred to as legacy names)
+#' in the channel URL instead of channel IDs.  The channel ID is needed to collect
+#' any data from the channel, the API will not accept the vanity name.  This function
+#' provides the channel ID for a channel, given the vanity name.
+#'
+#' @param term  Vanity name.  String.  Required
+#' @export
+yt_GetChannelID <- function(term = NULL){
+  vanity <- tuber::yt_search(term = term, simplify = FALSE)
+  vanity <- ytcol::dataframeFromJSON(vanity$items)
+  vanity <- as.character(vanity[1,6])
+  return(vanity)
+
+}

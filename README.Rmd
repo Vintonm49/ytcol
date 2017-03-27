@@ -13,6 +13,9 @@ The first step is to get authorization credentials for a Google App account, suc
 yt_oauth(client, secret)
 ```
 
+## Outputs
+Most of the functions provide an output in the form of a dataframe and saves that dataframe to a CSV file.  The user must have a folder called "yt_collection" in the working directory when the function is run, which is where the CSV file will be saved.  Otherwise, the functions will not execute properly.  The CSV files will be named by the type of function, input parameter (such as video ID), and date-time information for the system time when the function was run.  For example, a file may be named:  channel_ABCD_20170301_1400.csv, which means the user ran the yt.AllChannelVideos() function for channel ID "ABCD" at 1400 on 1 March 2017.
+
 ## Functions
 The first thing to understand about YouTube is that it is a collection of videos and channels.  A channel is equivalent to a user or account, and generally includes multiple videos.  Each video has statistics including views, likes, dislikes, favorites, and comments.  Each channel has a channel ID and some have vanity names that replace the channel ID in the URL for that channel.  Every video has a video ID.
 
