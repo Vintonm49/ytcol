@@ -82,3 +82,39 @@ yt_GetChannelID <- function(term = NULL){
   return(vanity)
 
 }
+
+#' Paste columns in a dataframe and suppress NAs
+#'
+#' The function suppresses NAs when pasting columns together
+#' in a data frame.
+#'
+#' @param ...  one or more R objects to be converted to character vectors.
+#' @param sep  String  A character string to separate the terms
+#' @param collapse String  An optional character string to separate the results.
+#' See the base paste function help for details.  Default is NULL
+#' @param na.rm  Must set to TRUE to suppress NAs
+#' @export
+#'
+pasteNA <- function(..., sep = " ", collapse = NULL, na.rm = F) {
+  if (na.rm == F)
+    paste(..., sep = sep, collapse = collapse)
+  else
+    if (na.rm == T) {
+      paste.na <- function(x, sep) {
+        x <- gsub("^\\s+|\\s+$", "", x)
+        ret <- paste(na.omit(x), collapse = sep)
+        is.na(ret) <- ret == ""
+        return(ret)
+      }
+      df <- data.frame(..., stringsAsFactors = F)
+      ret <- apply(df, 1, FUN = function(x) paste.na(x, sep))
+
+      if (is.null(collapse))
+        ret
+      else {
+        paste.na(ret, sep = collapse)
+      }
+    }
+}
+
+

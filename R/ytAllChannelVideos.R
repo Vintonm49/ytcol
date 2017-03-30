@@ -20,32 +20,47 @@
 yt.AllChannelVideos <- function(channel_id=NULL, published_before=NULL, published_after=NULL){
 
   channelAct <- tuber::list_channel_activities(filter=c(channel_id = channel_id) ,part = "contentDetails",
-                                        published_before = published_before,
-                                        published_after = published_after)
+                                               published_before = published_before,
+                                               published_after = published_after)
   channelList <- tuber::list_channel_activities(filter=c(channel_id = channel_id) ,
-                                         published_before = published_before,
-                                         published_after = published_after)
+                                                published_before = published_before,
+                                                published_after = published_after)
   df <- ytcol::dataframeFromJSON(channelAct$items)
+  if(ncol(df) > 4){
+    df$videoID <- ytcol::pasteNA(df$contentDetails.upload.videoId,df$contentDetails.playlistItem.resourceId.videoId,
+                         sep="", na.rm=TRUE)
+    df <- df[,c("kind","videoID")]
+
+
+  } else {
+    df <- df[,c(1,4)]
+  }
 
   token <- channelAct$nextPageToken
+  print(token)
 
   if(nrow(channelList) < 50){
     df<-cbind(df,channelList)
-    df<-df[,c(4,5,6,7,8,21)]
-    names(df)[1:2] <- c("videoID", "dateTime")
+    colnames(df)[which(colnames(df)=='contentDetails.upload.videoId')] <- "videoID"
+    df<-df[,c("videoID","publishedAt","channelId","title","description","channelTitle")]
+    df <- distinct(df, videoID, .keep_all = TRUE)
+    df <- na.omit(df)
+    names(df) <- c("video_ID", "video_dateTime","channel_ID","video_title","video_description","channel_title")
     df$pullDate <- Sys.time()
-    list_of_video_ids <- as.character(df$videoID)
+    list_of_video_ids <- as.character(df$video_ID)
     allVideoStats <- plyr::ldply(list_of_video_ids, ytcol::getVideoStatsDF)
     allVideoDetails <- plyr::ldply(list_of_video_ids, .fun = ytcol::getVideoDetailsDF)
-    allVideoDetails <- allVideoDetails[,-c(3,6:17)]
-    allVideoDetails <- allVideoDetails[,!names(allVideoDetails) %in% c("thumbnails.maxres.url",
-                                                                       "thumbnails.maxres.width",
-                                                                       "thumbnails.maxres.height")]
-
+    allVideoStats <- allVideoStats[,!names(allVideoStats) %in% c("pullDate")]
 
     allVideoInfo <- cbind(allVideoStats,allVideoDetails)
     df <- cbind(df, allVideoInfo)
-    df <- df[,-c(8,14:19)]
+    cols.dont.want <- c("channelId","channelTitle","liveBroadcastContent","localized.title","localized.description","thumbnails.standard.url",
+                        "thumbnails.standard.width","thumbnails.standard.height","publishedAt","title","description",
+                        "id","thumbnails.maxres.url","thumbnails.maxres.width","thumbnails.maxres.height",
+                        "thumbnails.default.url","thumbnails.default.width","thumbnails.default.height",
+                        "thumbnails.medium.url","thumbnails.medium.width","thumbnails.medium.height",
+                        "thumbnails.high.url","thumbnails.high.width","thumbnails.high.height")
+    df <- df[,! names(df) %in% cols.dont.want, drop=F]
     date <- format(Sys.time(),"%Y%m%d_%H%M")
     write.csv(df, file=paste("./yt_collection/","channel_",channel_id,"_!_",date,".csv", sep = ""), row.names = FALSE)
 
@@ -55,18 +70,25 @@ yt.AllChannelVideos <- function(channel_id=NULL, published_before=NULL, publishe
 
   repeat{
     channelActSub <- tuber::list_channel_activities(filter=c(channel_id = channel_id), part = "contentDetails",
-                                             published_before = published_before,
-                                             published_after = published_after,
-                                             page_token = token)
+                                                    published_before = published_before,
+                                                    published_after = published_after,
+                                                    page_token = token)
     channelListSub <- tuber::list_channel_activities(filter=c(channel_id = channel_id),
-                                              published_before = published_before,
-                                              published_after = published_after,
-                                              page_token = token)
+                                                     published_before = published_before,
+                                                     published_after = published_after,
+                                                     page_token = token)
     dff <- ytcol::dataframeFromJSON(channelActSub$items)
+    if(ncol(dff) > 4){
+      dff$videoID <- ytcol::pasteNA(dff$contentDetails.upload.videoId, dff$contentDetails.playlistItem.resourceId.videoId,
+                            sep="", na.rm = TRUE)
+      dff <- dff[,c("kind","videoID")]
+
+    } else {
+      dff <- dff[,c(1,4)]
+    }
     df <- gtools::smartbind(df, dff)
     channelList <- gtools::smartbind(channelList,channelListSub)
 
-    #print(channelActSub$nextPageToken)
     token <- channelActSub$nextPageToken
     if(is.null(token)){
       break
@@ -74,28 +96,32 @@ yt.AllChannelVideos <- function(channel_id=NULL, published_before=NULL, publishe
 
   }
   df<-cbind(df,channelList)
-  df<-df[,c(4,5,6,7,8,21)]
-  names(df)[1:2] <- c("videoID", "dateTime")
+  colnames(df)[which(colnames(df)=='contentDetails.upload.videoId')] <- "videoID"
+  df<-df[,c("videoID","publishedAt","channelId","title","description","channelTitle")]
+  df <- distinct(df, videoID, .keep_all = TRUE)
+  df <- na.omit(df)
+  names(df) <- c("video_ID", "video_dateTime","channel_ID","video_title","video_description","channel_title")
   df$pullDate <- Sys.time()
 
-  list_of_video_ids <- as.character(df$videoID)
+  list_of_video_ids <- as.character(df$video_ID)
   allVideoStats <- plyr::ldply(list_of_video_ids, ytcol::getVideoStatsDF)
   allVideoDetails <- plyr::ldply(list_of_video_ids, .fun = ytcol::getVideoDetailsDF)
-  allVideoDetails <- allVideoDetails[,-c(3,6:17)]
-  allVideoDetails <- allVideoDetails[,!names(allVideoDetails) %in% c("thumbnails.maxres.url",
-                                                                     "thumbnails.maxres.width",
-                                                                     "thumbnails.maxres.height")]
-
+  allVideoStats <- allVideoStats[,!names(allVideoStats) %in% c("pullDate")]
 
   allVideoInfo <- cbind(allVideoStats,allVideoDetails)
   df <- cbind(df, allVideoInfo)
-  df <- df[,-c(8,14:19)]
+  cols.dont.want <- c("channelId","channelTitle","liveBroadcastContent","localized.title","localized.description","thumbnails.standard.url",
+                      "thumbnails.standard.width","thumbnails.standard.height","publishedAt","title","description",
+                      "id","thumbnails.maxres.url","thumbnails.maxres.width","thumbnails.maxres.height",
+                      "thumbnails.default.url","thumbnails.default.width","thumbnails.default.height",
+                      "thumbnails.medium.url","thumbnails.medium.width","thumbnails.medium.height",
+                      "thumbnails.high.url","thumbnails.high.width","thumbnails.high.height")
+  df <- df[,! names(df) %in% cols.dont.want, drop=F]
   date <- format(Sys.time(),"%Y%m%d_%H%M")
   write.csv(df, file=paste("./yt_collection/","channel_",channel_id,"_!_",date,".csv", sep = ""), row.names = FALSE)
 
   return(df)
 }
-
 
 
 

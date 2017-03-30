@@ -80,3 +80,130 @@ yt.VideoComments <- function(video_id = NULL){
   return(comment1)
 
 }
+
+
+#' Utility for Getting Video Comments
+#'
+#' This function is a utility to be used in other functions to get comments for multiple
+#' videos.  Internal use.  Eliminates the save to CSV portion of the yt.VideoComments function.
+#' @param video_id  String.  Video ID from YouTube.
+#' @export
+#'
+yt.SimpleVideoComments <- function(video_id = NULL){
+  comment1 <- ytcol::yt.GetComments(filter=c(video_id = video_id))
+  comment2 <- ytcol::yt.GetComments(filter=c(video_id = video_id), simplify=FALSE)
+  total <- comment2$pageInfo$totalResults
+  if(total==0){
+    print("No comments on this video")
+  }
+  com_token <- comment2$nextPageToken
+  #print(com_token)
+  if(is.null(com_token)){
+    comment1$pullDate <- Sys.time()
+    return(comment1)
+  }else {
+    repeat{
+      comment1_sub <- ytcol::yt.GetComments(filter=c(video_id = video_id), page_token = com_token)
+      comment2_sub <- ytcol::yt.GetComments(filter=c(video_id = video_id), page_token = com_token,
+                                            simplify=FALSE)
+      comment1 <- gtools::smartbind(comment1, comment1_sub)
+      com_token <- comment2_sub$nextPageToken
+      if(is.null(com_token)){
+        break
+      }
+    }
+  }
+  comment1$pullDate <- Sys.time()
+  return(comment1)
+}
+
+#' Get Comments from All Videos on a Channel
+#'
+#' This function collects all the comments from all the videos on a channel,
+#' within a time frame if set.
+#'
+#'@param channel_id  String.  The YouTube channel ID.  Cannot be the vanity URL name.
+#'@param published_before Date.  RFC 339 Format.  Example, "1970-01-01T00:00:00Z"
+#'@param published_after  Date.  RFC 339 Format.  Example, "1970-01-01T00:00:00Z"
+#'@export
+
+yt.ChannelComments <- function(channel_id=NULL, published_before=NULL, published_after=NULL){
+  channelAct <- tuber::list_channel_activities(filter=c(channel_id = channel_id) ,part = "contentDetails",
+                                     published_after = published_after,
+                                     published_before = published_before)
+  df <- ytcol::dataframeFromJSON(channelAct$items)
+  if(ncol(df) > 4){
+    df$videoID <- ytcol::pasteNA(df$contentDetails.upload.videoId,df$contentDetails.playlistItem.resourceId.videoId,
+                                 sep="", na.rm=TRUE)
+    df <- df[,c("kind","videoID")]
+  } else {
+    df <- df[,c(1,4)]
+  }
+  token <- channelAct$nextPageToken
+
+  if(nrow(df) < 50){
+    colnames(df)[which(colnames(df)=='contentDetails.upload.videoId')] <- "videoID"
+    df <- distinct(df, videoID, .keep_all = TRUE)
+    df <- na.omit(df)
+    list_of_video_ids <- as.character(df$videoID)
+    comdf<-data.frame()
+    for (i in list_of_video_ids) {
+      comm <- try(ytcol::yt.SimpleVideoComments(i))
+      comdf <- rbind(comdf,comm)
+    }
+    cols.dont.want <- c("authorChannelUrl","canRate","viewerRating")
+    comdf <- comdf[,! names(comdf) %in% cols.dont.want, drop=F]
+    colnames(comdf)[which(colnames(comdf)=='publishedAt')] <- "comment_dateTime"
+    colnames(comdf)[which(colnames(comdf)=='updatedAt')] <- "updated_dateTime"
+    date <- format(Sys.time(),"%Y%m%d_%H%M")
+    write.csv(comdf, file=paste("./yt_collection/","channel_comments_",channel_id,"_!_",date,".csv", sep = ""), row.names = FALSE)
+    print(paste0("Number of videos: ",nrow(df)))
+    return(comdf)
+    break
+  }
+  repeat{
+    channelActSub <- tuber::list_channel_activities(filter=c(channel_id = channel_id), part = "contentDetails",
+                                                    published_before = published_before,
+                                                    published_after = published_after,
+                                                    page_token = token)
+    dff <- ytcol::dataframeFromJSON(channelActSub$items)
+    if(ncol(dff) > 4){
+      dff$videoID <- ytcol::pasteNA(dff$contentDetails.upload.videoId, dff$contentDetails.playlistItem.resourceId.videoId,
+                                    sep="", na.rm = TRUE)
+      dff <- dff[,c("kind","videoID")]
+
+    } else {
+      dff <- dff[,c(1,4)]
+    }
+    df <- gtools::smartbind(df, dff)
+    token <- channelActSub$nextPageToken
+    if(is.null(token)){
+      break
+    }
+
+  }
+  colnames(df)[which(colnames(df)=='contentDetails.upload.videoId')] <- "videoID" #only need if col=4
+  df <- distinct(df,videoID)
+  list_of_video_ids <- as.character(df$videoID)
+  comdf<-data.frame()
+  for (i in list_of_video_ids) {
+    comm <- try(ytcol::yt.SimpleVideoComments(i))
+    comdf <- rbind(comdf,comm)
+  }
+  cols.dont.want <- c("authorChannelUrl","canRate","viewerRating")
+  comdf <- comdf[,! names(comdf) %in% cols.dont.want, drop=F]
+  colnames(comdf)[which(colnames(comdf)=='publishedAt')] <- "comment_dateTime"
+  colnames(comdf)[which(colnames(comdf)=='updatedAt')] <- "updated_dateTime"
+  date <- format(Sys.time(),"%Y%m%d_%H%M")
+  write.csv(comdf, file=paste("./yt_collection/","channel_comments_",channel_id,"_!_",date,".csv", sep = ""), row.names = FALSE)
+  print(paste0("Number of videos: ",nrow(df)))
+  return(comdf)
+}
+
+
+
+
+
+
+
+
