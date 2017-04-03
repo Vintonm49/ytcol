@@ -61,22 +61,32 @@ yt.GetComments <- function (filter=NULL, part="snippet", text_format="html", sim
 yt.VideoComments <- function(video_id = NULL){
   comment1 <- ytcol::yt.GetComments(filter=c(video_id = video_id))
   comment2 <- ytcol::yt.GetComments(filter=c(video_id = video_id), simplify=FALSE)
+  total <- comment2$pageInfo$totalResults
+  if(total==0){
+    print("No comments on this video")
+  }
   com_token <- comment2$nextPageToken
-
-  repeat{
-    comment1_sub <- ytcol::yt.GetComments(filter=c(video_id = video_id), page_token = com_token)
-    comment2_sub <- ytcol::yt.GetComments(filter=c(video_id = video_id), page_token = com_token,
-                                          simplify=FALSE)
-    comment1 <- gtools::smartbind(comment1, comment1_sub)
-    com_token <- comment2_sub$nextPageToken
-    if(is.null(com_token)){
-      break
+  if(is.null(com_token)){
+    comment1$pullDate <- Sys.time()
+    date <- format(Sys.time(),"%Y%m%d_%H%M")
+    write.csv(comment1, file=paste("./yt_collection/","comments_",video_id,"_!_",date,".csv", sep = ""), row.names = FALSE)
+    return(comment1)
+  }else {
+    repeat{
+      comment1_sub <- ytcol::yt.GetComments(filter=c(video_id = video_id), page_token = com_token)
+      comment2_sub <- ytcol::yt.GetComments(filter=c(video_id = video_id), page_token = com_token,
+                                            simplify=FALSE)
+      comment1 <- gtools::smartbind(comment1, comment1_sub)
+      com_token <- comment2_sub$nextPageToken
+      if(is.null(com_token)){
+        break
+      }
     }
   }
+
   comment1$pullDate <- Sys.time()
   date <- format(Sys.time(),"%Y%m%d_%H%M")
   write.csv(comment1, file=paste("./yt_collection/","comments_",video_id,"_!_",date,".csv", sep = ""), row.names = FALSE)
-
   return(comment1)
 
 }
@@ -202,7 +212,51 @@ yt.ChannelComments <- function(channel_id=NULL, published_before=NULL, published
 
 
 
+#' Get Function for Collecting Comment Replies from a YouTube Video
+#'
+#' Basic function, adapted from tuber package, get_comments()
+#' Used by other comment functions in the ytcol package
+#'
+#' @param filter string; Required.
+#' named vector of length 1
+#' potential names of the entry in the vector:
+#' \code{comment_ID}: comment ID.
+#' \code{parent_ID}: parent comment ID.
+#' @param part  Comment resource requested. Required. Comma separated list of one or more of the
+#' following: \code{id, snippet}. e.g., \code{"id, snippet"}, \code{"id"}, etc. Default: \code{snippet}.
+#' @param max_results  Maximum number of items that should be returned. Integer. Optional. Can be between 20 and 100. Default is 100.
+#' @param page_token  Specific page in the result set that should be returned. Optional.
+#' @param text_format Data Type: Character. Default is \code{"html"}. Only takes \code{"html"} or \code{"plainText"}. Optional.
+#' @param \dots Additional arguments passed to \code{\link{tuber_GET}}.
+#' @return Nested named list.
+#' @export
+#'
+yt.GetCommentReply <- function (filter=NULL, part="snippet", text_format="html", max_results=100, page_token = NULL, ...) {
 
+  if (max_results < 20 | max_results > 100) stop("max_results only takes a value between 20 and 100.")
+  if (text_format != "html" & text_format !="plainText") stop("Provide a legitimate value of textFormat.")
+
+  if (!(names(filter) %in% c("comment_ID", "parent_ID"))) stop("filter can only take one of values: comment_ID or parent_ID")
+  if ( length(filter) != 1) stop("filter must be a vector of length 1.")
+
+  translate_filter   <- c(parent_ID = 'parentId', comment_ID ='id')
+  yt_filter_name     <- as.vector(translate_filter[match(names(filter), names(translate_filter))])
+  names(filter)      <- yt_filter_name
+
+  querylist <- list(part=part, maxResults=max_results, textFormat=text_format, pageToken=page_token)
+  querylist <- c(querylist, filter)
+
+  res <- ytcol::yt_GET("comments", querylist, ...)
+
+  if (simplify==TRUE & part=="snippet") {
+    simple_res  <- lapply(res$items, function(x) unlist(x$snippet$topLevelComment$snippet))
+    simpler_res <- plyr::ldply(simple_res, rbind)
+    return(simpler_res)
+  }
+
+  res
+
+}
 
 
 
