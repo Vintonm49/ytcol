@@ -75,7 +75,7 @@ yt_check <-
 #'
 #' @param term  Vanity name.  String.  Required
 #' @export
-yt_GetChannelID <- function(term = NULL){
+yt.GetChannelID <- function(term = NULL){
   vanity <- tuber::yt_search(term = term, simplify = FALSE)
   vanity <- ytcol::dataframeFromJSON(vanity$items)
   vanity <- as.character(vanity[1,6])
