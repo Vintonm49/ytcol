@@ -167,9 +167,9 @@ yt.VideoComments <- function(video_id = NULL){
     names(comment222) <- c("comment_ID", "video_ID", "author_display_name","author_channel_ID","text_display",
                            "text_original","dateTime", "updated_dateTime", "reply_count")
     comments_combo <- smartbind(comment222,replydf_join)
-    #comments_combo$pullDate <- Sys.time()
-    #date <- format(Sys.time(),"%Y%m%d_%H%M")
-    #write.csv(comments_combo, file=paste("./yt_collection/","comments_",video_id,"_!_",date,".csv", sep = ""), row.names = FALSE)
+    comments_combo$pullDate <- Sys.time()
+    date <- format(Sys.time(),"%Y%m%d_%H%M")
+    write.csv(comments_combo, file=paste("./yt_collection/","comments_",video_id,"_!_",date,".csv", sep = ""), row.names = FALSE)
     return(comments_combo)
   }else{
     comment1$pullDate <- Sys.time()
@@ -177,10 +177,6 @@ yt.VideoComments <- function(video_id = NULL){
     write.csv(comment1, file=paste("./yt_collection/","comments_",video_id,"_!_",date,".csv", sep = ""), row.names = FALSE)
     return(comment1)
   }
-  #comment1$pullDate <- Sys.time()
-  #date <- format(Sys.time(),"%Y%m%d_%H%M")
-  #write.csv(comment1, file=paste("./yt_collection/","comments_",video_id,"_!_",date,".csv", sep = ""), row.names = FALSE)
-  #return(comment1)
 
 }
 
@@ -201,25 +197,111 @@ yt.SimpleVideoComments <- function(video_id = NULL){
 
   }
   com_token <- comment2$nextPageToken
-  #print(com_token)
   if(is.null(com_token)){
-    comment1$pullDate <- Sys.time()
-    return(comment1)
+    ##Get replies to comments if they exist
+    comment22 <- dataframeFromJSON(comment2$items)
+    comment22$snippet.totalReplyCount <- as.numeric(levels(comment22$snippet.totalReplyCount))[comment22$snippet.totalReplyCount]
+    if(sum(comment22$snippet.totalReplyCount) > 0){
+      reply<- subset(comment22, snippet.totalReplyCount > 0)  ## set of comments that have replies
+      reply <- reply[,c("id","snippet.videoId","snippet.topLevelComment.snippet.authorDisplayName","snippet.topLevelComment.snippet.authorChannelId.value",
+                        "snippet.topLevelComment.snippet.textDisplay","snippet.topLevelComment.snippet.textOriginal",
+                        "snippet.topLevelComment.snippet.publishedAt","snippet.topLevelComment.snippet.updatedAt",
+                        "snippet.totalReplyCount")]
+      names(reply) <- c("parent_comment_ID", "video_ID", "author_display_name","author_channel_ID","text_display",
+                        "text_original","parent_dateTime", "parent_updated_dateTime", "reply_count")
+      list_of_parent_ids <- as.character(reply$parent_comment_ID)
+      replydf<-data.frame()
+      for (i in list_of_parent_ids) {
+        comreply <- try(test.yt.GetCommentReply(filter = c(parent_ID = i)))  ##max results is 100, get pageToken (check with sum(reply$reply_count))
+        comreply <- dataframeFromJSON(comreply$items)
+        replydf <- rbind(replydf, comreply)
+      }
+      replydf <- replydf[,c("id","snippet.authorDisplayName","snippet.authorChannelId.value",
+                            "snippet.textDisplay","snippet.textOriginal","snippet.parentId",
+                            "snippet.publishedAt","snippet.updatedAt")]
+      names(replydf) <- c("reply_comment_ID","author_display_name","author_channel_ID","text_display",
+                          "text_original", "parent_comment_ID", "reply_dateTime","reply_updated_dateTime")
+      replydf_join <- merge(x = replydf, y = reply, by = "parent_comment_ID", all.x = TRUE)
+      drop_cols <- c("text_display.y","text_original.y","parent_dateTime","parent_updated_dateTime","reply_count")
+      replydf_join <- replydf_join[,! names(replydf_join) %in% drop_cols, drop=F]
+      names(replydf_join) <- c("parent_comment_ID" ,"comment_ID","author_display_name","author_channel_ID","text_display",
+                               "text_original", "dateTime","updated_dateTime","video_ID",
+                               "parent_author_display_name","parent_author_channel_ID")
+      replydf_join$reply_count <- 0  #add the reply_count column
+      comment222 <- comment22[,c("id","snippet.videoId","snippet.topLevelComment.snippet.authorDisplayName","snippet.topLevelComment.snippet.authorChannelId.value",
+                                 "snippet.topLevelComment.snippet.textDisplay","snippet.topLevelComment.snippet.textOriginal",
+                                 "snippet.topLevelComment.snippet.publishedAt","snippet.topLevelComment.snippet.updatedAt",
+                                 "snippet.totalReplyCount")]
+      names(comment222) <- c("comment_ID", "video_ID", "author_display_name","author_channel_ID","text_display",
+                             "text_original","dateTime", "updated_dateTime", "reply_count")
+      comments_combo <- smartbind(comment222,replydf_join)
+      comments_combo$pullDate <- Sys.time()
+      return(comments_combo)
+    }else{
+      comment1$pullDate <- Sys.time()
+      return(comment1)
+    }
+
   }else {
     repeat{
       comment1_sub <- ytcol::yt.GetComments(filter=c(video_id = video_id), page_token = com_token)
       comment2_sub <- ytcol::yt.GetComments(filter=c(video_id = video_id), page_token = com_token,
                                             simplify=FALSE)
+      comment22 <- dataframeFromJSON(comment2$items)
+      comment22_sub <- dataframeFromJSON(comment2_sub$items)
       comment1 <- gtools::smartbind(comment1, comment1_sub)
+      comment22 <- gtools::smartbind(comment22, comment22_sub)
       com_token <- comment2_sub$nextPageToken
       if(is.null(com_token)){
         break
       }
     }
   }
-  comment1$pullDate <- Sys.time()
-  return(comment1)
+  ##Get replies to comments if they exist
+  comment22$snippet.totalReplyCount <- as.numeric(levels(comment22$snippet.totalReplyCount))[comment22$snippet.totalReplyCount]
+  if(sum(comment22$snippet.totalReplyCount) > 0){
+    reply<- subset(comment22, snippet.totalReplyCount > 0)  ## set of comments that have replies
+    reply <- reply[,c("id","snippet.videoId","snippet.topLevelComment.snippet.authorDisplayName","snippet.topLevelComment.snippet.authorChannelId.value",
+                      "snippet.topLevelComment.snippet.textDisplay","snippet.topLevelComment.snippet.textOriginal",
+                      "snippet.topLevelComment.snippet.publishedAt","snippet.topLevelComment.snippet.updatedAt",
+                      "snippet.totalReplyCount")]
+    names(reply) <- c("parent_comment_ID", "video_ID", "author_display_name","author_channel_ID","text_display",
+                      "text_original","parent_dateTime", "parent_updated_dateTime", "reply_count")
+    list_of_parent_ids <- as.character(reply$parent_comment_ID)
+    replydf<-data.frame()
+    for (i in list_of_parent_ids) {
+      comreply <- try(test.yt.GetCommentReply(filter = c(parent_ID = i)))  ##max results is 100, get pageToken (check with sum(reply$reply_count))
+      comreply <- dataframeFromJSON(comreply$items)
+      replydf <- rbind(replydf, comreply)
+    }
+    replydf <- replydf[,c("id","snippet.authorDisplayName","snippet.authorChannelId.value",
+                          "snippet.textDisplay","snippet.textOriginal","snippet.parentId",
+                          "snippet.publishedAt","snippet.updatedAt")]
+    names(replydf) <- c("reply_comment_ID","author_display_name","author_channel_ID","text_display",
+                        "text_original", "parent_comment_ID", "reply_dateTime","reply_updated_dateTime")
+    replydf_join <- merge(x = replydf, y = reply, by = "parent_comment_ID", all.x = TRUE)
+    drop_cols <- c("text_display.y","text_original.y","parent_dateTime","parent_updated_dateTime","reply_count")
+    replydf_join <- replydf_join[,! names(replydf_join) %in% drop_cols, drop=F]
+    names(replydf_join) <- c("parent_comment_ID" ,"comment_ID","author_display_name","author_channel_ID","text_display",
+                             "text_original", "dateTime","updated_dateTime","video_ID",
+                             "parent_author_display_name","parent_author_channel_ID")
+    replydf_join$reply_count <- 0  #add the reply_count column
+    comment222 <- comment22[,c("id","snippet.videoId","snippet.topLevelComment.snippet.authorDisplayName","snippet.topLevelComment.snippet.authorChannelId.value",
+                               "snippet.topLevelComment.snippet.textDisplay","snippet.topLevelComment.snippet.textOriginal",
+                               "snippet.topLevelComment.snippet.publishedAt","snippet.topLevelComment.snippet.updatedAt",
+                               "snippet.totalReplyCount")]
+    names(comment222) <- c("comment_ID", "video_ID", "author_display_name","author_channel_ID","text_display",
+                           "text_original","dateTime", "updated_dateTime", "reply_count")
+    comments_combo <- smartbind(comment222,replydf_join)
+    comments_combo$pullDate <- Sys.time()
+    return(comments_combo)
+  }else{
+    comment1$pullDate <- Sys.time()
+    return(comment1)
+  }
+
 }
+
 
 #' Get Comments from All Videos on a Channel
 #'
