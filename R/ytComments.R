@@ -64,7 +64,7 @@ yt.VideoComments <- function(video_id = NULL){
   total <- comment2$pageInfo$totalResults
   if(total==0){
     print("No comments on this video")
-
+    return(NA)
   }
   com_token <- comment2$nextPageToken
   if(is.null(com_token)){
@@ -194,7 +194,7 @@ yt.SimpleVideoComments <- function(video_id = NULL){
   total <- comment2$pageInfo$totalResults
   if(total==0){
     print("No comments on this video")
-
+    return(NA)
   }
   com_token <- comment2$nextPageToken
   if(is.null(com_token)){
@@ -318,16 +318,16 @@ yt.ChannelComments <- function(channel_id=NULL, published_before=NULL, published
                                      published_after = published_after,
                                      published_before = published_before)
   df <- ytcol::dataframeFromJSON(channelAct$items)
-  if(ncol(df) > 4){
+  if(ncol(df) > 4){  #not all videos are uploads
     df$videoID <- ytcol::pasteNA(df$contentDetails.upload.videoId,df$contentDetails.playlistItem.resourceId.videoId,
                                  sep="", na.rm=TRUE)
     df <- df[,c("kind","videoID")]
   } else {
     df <- df[,c(1,4)]
-  }
+  }  #result is dataframe with video IDs
   token <- channelAct$nextPageToken
 
-  if(nrow(df) < 50){
+  if(nrow(df) < 50){  # if equal to 50, there are more videos on the channel (max return hit)
     colnames(df)[which(colnames(df)=='contentDetails.upload.videoId')] <- "videoID"
     df <- distinct(df, videoID, .keep_all = TRUE)
     df <- na.omit(df)
@@ -347,7 +347,7 @@ yt.ChannelComments <- function(channel_id=NULL, published_before=NULL, published
     return(comdf)
     break
   }
-  repeat{
+  repeat{ #get the rest of the video IDs
     channelActSub <- tuber::list_channel_activities(filter=c(channel_id = channel_id), part = "contentDetails",
                                                     published_before = published_before,
                                                     published_after = published_after,
@@ -367,7 +367,7 @@ yt.ChannelComments <- function(channel_id=NULL, published_before=NULL, published
       break
     }
 
-  }
+  }  #now have the full set of video IDs
   colnames(df)[which(colnames(df)=='contentDetails.upload.videoId')] <- "videoID" #only need if col=4
   df <- distinct(df,videoID)
   list_of_video_ids <- as.character(df$videoID)
