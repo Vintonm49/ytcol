@@ -65,6 +65,7 @@ yt.VideoComments <- function(video_id = NULL){
   if(total==0){
     print("No comments on this video")
     return(NA)
+
   }
   com_token <- comment2$nextPageToken
   if(is.null(com_token)){
@@ -81,7 +82,7 @@ yt.VideoComments <- function(video_id = NULL){
                         "text_original","parent_dateTime", "parent_updated_dateTime", "reply_count")
       list_of_parent_ids <- as.character(reply$parent_comment_ID)
       replydf<-data.frame()
-      for (i in list_of_parent_ids) {
+      for (i in list_of_parent_ids) {  #get replies to comments that have replies
         comreply <- try(test.yt.GetCommentReply(filter = c(parent_ID = i)))  ##max results is 100, get pageToken (check with sum(reply$reply_count))
         comreply <- dataframeFromJSON(comreply$items)
         replydf <- rbind(replydf, comreply)
@@ -109,11 +110,19 @@ yt.VideoComments <- function(video_id = NULL){
       date <- format(Sys.time(),"%Y%m%d_%H%M")
       write.csv(comments_combo, file=paste("./yt_collection/","comments_",video_id,"_!_",date,".csv", sep = ""), row.names = FALSE)
       return(comments_combo)
-    }else{
-      comment1$pullDate <- Sys.time()
+    }else{  #number of replies is zero and token is NULL
+      comment22 <- dataframeFromJSON(comment2$items)
+      comment22$snippet.totalReplyCount <- as.numeric(levels(comment22$snippet.totalReplyCount))[comment22$snippet.totalReplyCount]
+      comment222 <- comment22[,c("id","snippet.videoId","snippet.topLevelComment.snippet.authorDisplayName","snippet.topLevelComment.snippet.authorChannelId.value",
+                                 "snippet.topLevelComment.snippet.textDisplay","snippet.topLevelComment.snippet.textOriginal",
+                                 "snippet.topLevelComment.snippet.publishedAt","snippet.topLevelComment.snippet.updatedAt",
+                                 "snippet.totalReplyCount")]
+      names(comment222) <- c("comment_ID", "video_ID", "author_display_name","author_channel_ID","text_display",
+                             "text_original","dateTime", "updated_dateTime", "reply_count")
+      comment222$pullDate <- Sys.time()
       date <- format(Sys.time(),"%Y%m%d_%H%M")
-      write.csv(comment1, file=paste("./yt_collection/","comments_",video_id,"_!_",date,".csv", sep = ""), row.names = FALSE)
-      return(comment1)
+      write.csv(comment222, file=paste("./yt_collection/","comments_",video_id,"_!_",date,".csv", sep = ""), row.names = FALSE)
+      return(comment222)
     }
 
   }else {
@@ -172,10 +181,18 @@ yt.VideoComments <- function(video_id = NULL){
     write.csv(comments_combo, file=paste("./yt_collection/","comments_",video_id,"_!_",date,".csv", sep = ""), row.names = FALSE)
     return(comments_combo)
   }else{
-    comment1$pullDate <- Sys.time()
+    comment22 <- dataframeFromJSON(comment2$items)
+    comment22$snippet.totalReplyCount <- as.numeric(levels(comment22$snippet.totalReplyCount))[comment22$snippet.totalReplyCount]
+    comment222 <- comment22[,c("id","snippet.videoId","snippet.topLevelComment.snippet.authorDisplayName","snippet.topLevelComment.snippet.authorChannelId.value",
+                               "snippet.topLevelComment.snippet.textDisplay","snippet.topLevelComment.snippet.textOriginal",
+                               "snippet.topLevelComment.snippet.publishedAt","snippet.topLevelComment.snippet.updatedAt",
+                               "snippet.totalReplyCount")]
+    names(comment222) <- c("comment_ID", "video_ID", "author_display_name","author_channel_ID","text_display",
+                           "text_original","dateTime", "updated_dateTime", "reply_count")
+    comment222$pullDate <- Sys.time()
     date <- format(Sys.time(),"%Y%m%d_%H%M")
-    write.csv(comment1, file=paste("./yt_collection/","comments_",video_id,"_!_",date,".csv", sep = ""), row.names = FALSE)
-    return(comment1)
+    write.csv(comment222, file=paste("./yt_collection/","comments_",video_id,"_!_",date,".csv", sep = ""), row.names = FALSE)
+    return(comment222)
   }
 
 }
@@ -195,6 +212,7 @@ yt.SimpleVideoComments <- function(video_id = NULL){
   if(total==0){
     print("No comments on this video")
     return(NA)
+
   }
   com_token <- comment2$nextPageToken
   if(is.null(com_token)){
@@ -211,7 +229,7 @@ yt.SimpleVideoComments <- function(video_id = NULL){
                         "text_original","parent_dateTime", "parent_updated_dateTime", "reply_count")
       list_of_parent_ids <- as.character(reply$parent_comment_ID)
       replydf<-data.frame()
-      for (i in list_of_parent_ids) {
+      for (i in list_of_parent_ids) {  #get replies to comments that have replies
         comreply <- try(test.yt.GetCommentReply(filter = c(parent_ID = i)))  ##max results is 100, get pageToken (check with sum(reply$reply_count))
         comreply <- dataframeFromJSON(comreply$items)
         replydf <- rbind(replydf, comreply)
@@ -237,9 +255,17 @@ yt.SimpleVideoComments <- function(video_id = NULL){
       comments_combo <- smartbind(comment222,replydf_join)
       comments_combo$pullDate <- Sys.time()
       return(comments_combo)
-    }else{
-      comment1$pullDate <- Sys.time()
-      return(comment1)
+    }else{  #number of replies is zero and token is NULL
+      comment22 <- dataframeFromJSON(comment2$items)
+      comment22$snippet.totalReplyCount <- as.numeric(levels(comment22$snippet.totalReplyCount))[comment22$snippet.totalReplyCount]
+      comment222 <- comment22[,c("id","snippet.videoId","snippet.topLevelComment.snippet.authorDisplayName","snippet.topLevelComment.snippet.authorChannelId.value",
+                                 "snippet.topLevelComment.snippet.textDisplay","snippet.topLevelComment.snippet.textOriginal",
+                                 "snippet.topLevelComment.snippet.publishedAt","snippet.topLevelComment.snippet.updatedAt",
+                                 "snippet.totalReplyCount")]
+      names(comment222) <- c("comment_ID", "video_ID", "author_display_name","author_channel_ID","text_display",
+                             "text_original","dateTime", "updated_dateTime", "reply_count")
+      comment222$pullDate <- Sys.time()
+      return(comment222)
     }
 
   }else {
@@ -296,12 +322,19 @@ yt.SimpleVideoComments <- function(video_id = NULL){
     comments_combo$pullDate <- Sys.time()
     return(comments_combo)
   }else{
-    comment1$pullDate <- Sys.time()
-    return(comment1)
+    comment22 <- dataframeFromJSON(comment2$items)
+    comment22$snippet.totalReplyCount <- as.numeric(levels(comment22$snippet.totalReplyCount))[comment22$snippet.totalReplyCount]
+    comment222 <- comment22[,c("id","snippet.videoId","snippet.topLevelComment.snippet.authorDisplayName","snippet.topLevelComment.snippet.authorChannelId.value",
+                               "snippet.topLevelComment.snippet.textDisplay","snippet.topLevelComment.snippet.textOriginal",
+                               "snippet.topLevelComment.snippet.publishedAt","snippet.topLevelComment.snippet.updatedAt",
+                               "snippet.totalReplyCount")]
+    names(comment222) <- c("comment_ID", "video_ID", "author_display_name","author_channel_ID","text_display",
+                           "text_original","dateTime", "updated_dateTime", "reply_count")
+    comment222$pullDate <- Sys.time()
+    return(comment222)
   }
 
 }
-
 
 #' Get Comments from All Videos on a Channel
 #'
@@ -312,19 +345,18 @@ yt.SimpleVideoComments <- function(video_id = NULL){
 #'@param published_before Date.  RFC 339 Format.  Example, "1970-01-01T00:00:00Z"
 #'@param published_after  Date.  RFC 339 Format.  Example, "1970-01-01T00:00:00Z"
 #'@export
-
-yt.ChannelComments <- function(channel_id=NULL, published_before=NULL, published_after=NULL){
+test.yt.ChannelComments <- function(channel_id=NULL, published_before=NULL, published_after=NULL){
   channelAct <- tuber::list_channel_activities(filter=c(channel_id = channel_id) ,part = "contentDetails",
-                                     published_after = published_after,
-                                     published_before = published_before)
+                                               published_after = published_after,
+                                               published_before = published_before)
   df <- ytcol::dataframeFromJSON(channelAct$items)
-  if(ncol(df) > 4){  #not all videos are uploads
+  if(ncol(df) > 4){
     df$videoID <- ytcol::pasteNA(df$contentDetails.upload.videoId,df$contentDetails.playlistItem.resourceId.videoId,
                                  sep="", na.rm=TRUE)
     df <- df[,c("kind","videoID")]
   } else {
     df <- df[,c(1,4)]
-  }  #result is dataframe with video IDs
+  }
   token <- channelAct$nextPageToken
 
   if(nrow(df) < 50){  # if equal to 50, there are more videos on the channel (max return hit)
@@ -337,20 +369,20 @@ yt.ChannelComments <- function(channel_id=NULL, published_before=NULL, published
       comm <- try(ytcol::yt.SimpleVideoComments(i))
       comdf <- rbind(comdf,comm)
     }
-    cols.dont.want <- c("authorChannelUrl","canRate","viewerRating")
-    comdf <- comdf[,! names(comdf) %in% cols.dont.want, drop=F]
-    colnames(comdf)[which(colnames(comdf)=='publishedAt')] <- "comment_dateTime"
-    colnames(comdf)[which(colnames(comdf)=='updatedAt')] <- "updated_dateTime"
+    comdf <- comdf[,c("comment_ID", "video_ID", "author_display_name","author_channel_ID","text_display",
+                      "text_original","dateTime", "updated_dateTime", "reply_count", "parent_comment_ID",
+                      "parent_author_display_name","parent_author_channel_ID","pullDate")]
+    comdf <- comdf[!is.na(comdf$comment_ID),]
     date <- format(Sys.time(),"%Y%m%d_%H%M")
     write.csv(comdf, file=paste("./yt_collection/","channel_comments_",channel_id,"_!_",date,".csv", sep = ""), row.names = FALSE)
     print(paste0("Number of videos: ",nrow(df)))
     return(comdf)
     break
   }
-  repeat{ #get the rest of the video IDs
+  repeat{  #get the rest of the video IDs
     channelActSub <- tuber::list_channel_activities(filter=c(channel_id = channel_id), part = "contentDetails",
-                                                    published_before = published_before,
                                                     published_after = published_after,
+                                                    published_before = published_before,
                                                     page_token = token)
     dff <- ytcol::dataframeFromJSON(channelActSub$items)
     if(ncol(dff) > 4){
@@ -366,25 +398,25 @@ yt.ChannelComments <- function(channel_id=NULL, published_before=NULL, published
     if(is.null(token)){
       break
     }
-
-  }  #now have the full set of video IDs
+  }
   colnames(df)[which(colnames(df)=='contentDetails.upload.videoId')] <- "videoID" #only need if col=4
   df <- distinct(df,videoID)
   list_of_video_ids <- as.character(df$videoID)
   comdf<-data.frame()
   for (i in list_of_video_ids) {
     comm <- try(ytcol::yt.SimpleVideoComments(i))
-    comdf <- rbind(comdf,comm)
+    comdf <- gtools::smartbind(comdf,comm)
   }
-  cols.dont.want <- c("authorChannelUrl","canRate","viewerRating")
-  comdf <- comdf[,! names(comdf) %in% cols.dont.want, drop=F]
-  colnames(comdf)[which(colnames(comdf)=='publishedAt')] <- "comment_dateTime"
-  colnames(comdf)[which(colnames(comdf)=='updatedAt')] <- "updated_dateTime"
+  comdf <- comdf[,c("comment_ID", "video_ID", "author_display_name","author_channel_ID","text_display",
+                    "text_original","dateTime", "updated_dateTime", "reply_count", "parent_comment_ID",
+                    "parent_author_display_name","parent_author_channel_ID","pullDate")]
+  comdf <- comdf[!is.na(comdf$comment_ID),]
   date <- format(Sys.time(),"%Y%m%d_%H%M")
   write.csv(comdf, file=paste("./yt_collection/","channel_comments_",channel_id,"_!_",date,".csv", sep = ""), row.names = FALSE)
   print(paste0("Number of videos: ",nrow(df)))
   return(comdf)
 }
+
 
 
 
