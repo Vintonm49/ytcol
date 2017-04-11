@@ -4,7 +4,6 @@
 #' @param l video_id  String.
 #' @return A dataframe.
 #' @export
-#' @example getVideoStatsDF(video_id)
 getVideoStatsDF <- function(video_id){
   stats <- as.data.frame(get_stats(video_id))
   stats$pullDate <- Sys.time()
@@ -17,8 +16,6 @@ getVideoStatsDF <- function(video_id){
 #' @param l video_id  String.
 #' @return A dataframe.
 #' @export
-#' @example
-#' getVideoDetailsDF(video_id)
 getVideoDetailsDF <- function(video_id){
   details <- get_video_details(video_id)
   return(data.frame(t(unlist(details))))

@@ -56,8 +56,6 @@ yt.GetComments <- function (filter=NULL, part="snippet", text_format="html", sim
 #' @return Dataframe with variables including author information, comment text, date-time posted,
 #' and date-time updated.
 #' @export
-#' @example
-#' yt.VideoComments(video_id = "tgchTz8XjrI")
 yt.VideoComments <- function(video_id = NULL){
   comment1 <- ytcol::yt.GetComments(filter=c(video_id = video_id))
   comment2 <- ytcol::yt.GetComments(filter=c(video_id = video_id), simplify=FALSE)
@@ -107,6 +105,10 @@ yt.VideoComments <- function(video_id = NULL){
                              "text_original","dateTime", "updated_dateTime", "reply_count")
       comments_combo <- smartbind(comment222,replydf_join)
       comments_combo$pullDate <- Sys.time()
+      comments_combo$text_original <- gsub('\n'," ", comments_combo$text_original)  #replace breaklines with space.
+      comments_combo$text_display <- gsub('\n'," ", comments_combo$text_display)
+      comments_combo$text_original <- gsub('<br />'," ", comments_combo$text_original)  #replace breaklines with space.
+      comments_combo$text_display <- gsub('<br />'," ", comments_combo$text_display)
       date <- format(Sys.time(),"%Y%m%d_%H%M")
       write.csv(comments_combo, file=paste("./yt_collection/","comments_",video_id,"_!_",date,".csv", sep = ""), row.names = FALSE)
       return(comments_combo)
@@ -120,6 +122,10 @@ yt.VideoComments <- function(video_id = NULL){
       names(comment222) <- c("comment_ID", "video_ID", "author_display_name","author_channel_ID","text_display",
                              "text_original","dateTime", "updated_dateTime", "reply_count")
       comment222$pullDate <- Sys.time()
+      comment222$text_original <- gsub('\n'," ", comment222$text_original)  #replace breaklines with space.
+      comment222$text_display <- gsub('\n'," ", comment222$text_display)
+      comment222$text_original <- gsub('<br />'," ", comment222$text_original)  #replace breaklines with space.
+      comment222$text_display <- gsub('<br />'," ", comment222$text_display)
       date <- format(Sys.time(),"%Y%m%d_%H%M")
       write.csv(comment222, file=paste("./yt_collection/","comments_",video_id,"_!_",date,".csv", sep = ""), row.names = FALSE)
       return(comment222)
@@ -177,6 +183,11 @@ yt.VideoComments <- function(video_id = NULL){
                            "text_original","dateTime", "updated_dateTime", "reply_count")
     comments_combo <- smartbind(comment222,replydf_join)
     comments_combo$pullDate <- Sys.time()
+    comments_combo$text_original <- gsub('\n'," ", comments_combo$text_original)  #replace breaklines with space.
+    comments_combo$text_display <- gsub('\n'," ", comments_combo$text_display)
+    comments_combo$text_original <- gsub('<br />'," ", comments_combo$text_original)  #replace breaklines with space.
+    comments_combo$text_display <- gsub('<br />'," ", comments_combo$text_display)
+
     date <- format(Sys.time(),"%Y%m%d_%H%M")
     write.csv(comments_combo, file=paste("./yt_collection/","comments_",video_id,"_!_",date,".csv", sep = ""), row.names = FALSE)
     return(comments_combo)
@@ -190,6 +201,10 @@ yt.VideoComments <- function(video_id = NULL){
     names(comment222) <- c("comment_ID", "video_ID", "author_display_name","author_channel_ID","text_display",
                            "text_original","dateTime", "updated_dateTime", "reply_count")
     comment222$pullDate <- Sys.time()
+    comment222$text_original <- gsub('\n'," ", comment222$text_original)  #replace breaklines with space.
+    comment222$text_display <- gsub('\n'," ", comment222$text_display)
+    comment222$text_original <- gsub('<br />'," ", comment222$text_original)  #replace breaklines with space.
+    comment222$text_display <- gsub('<br />'," ", comment222$text_display)
     date <- format(Sys.time(),"%Y%m%d_%H%M")
     write.csv(comment222, file=paste("./yt_collection/","comments_",video_id,"_!_",date,".csv", sep = ""), row.names = FALSE)
     return(comment222)
@@ -254,6 +269,10 @@ yt.SimpleVideoComments <- function(video_id = NULL){
                              "text_original","dateTime", "updated_dateTime", "reply_count")
       comments_combo <- smartbind(comment222,replydf_join)
       comments_combo$pullDate <- Sys.time()
+      comments_combo$text_original <- gsub('\n'," ", comments_combo$text_original)  #replace breaklines with space.
+      comments_combo$text_display <- gsub('\n'," ", comments_combo$text_display)
+      comments_combo$text_original <- gsub('<br />'," ", comments_combo$text_original)  #replace breaklines with space.
+      comments_combo$text_display <- gsub('<br />'," ", comments_combo$text_display)
       return(comments_combo)
     }else{  #number of replies is zero and token is NULL
       comment22 <- dataframeFromJSON(comment2$items)
@@ -265,6 +284,10 @@ yt.SimpleVideoComments <- function(video_id = NULL){
       names(comment222) <- c("comment_ID", "video_ID", "author_display_name","author_channel_ID","text_display",
                              "text_original","dateTime", "updated_dateTime", "reply_count")
       comment222$pullDate <- Sys.time()
+      comment222$text_original <- gsub('\n'," ", comment222$text_original)  #replace breaklines with space.
+      comment222$text_display <- gsub('\n'," ", comment222$text_display)
+      comment222$text_original <- gsub('<br />'," ", comment222$text_original)  #replace breaklines with space.
+      comment222$text_display <- gsub('<br />'," ", comment222$text_display)
       return(comment222)
     }
 
@@ -320,6 +343,10 @@ yt.SimpleVideoComments <- function(video_id = NULL){
                            "text_original","dateTime", "updated_dateTime", "reply_count")
     comments_combo <- smartbind(comment222,replydf_join)
     comments_combo$pullDate <- Sys.time()
+    comments_combo$text_original <- gsub('\n'," ", comments_combo$text_original)  #replace breaklines with space.
+    comments_combo$text_display <- gsub('\n'," ", comments_combo$text_display)
+    comments_combo$text_original <- gsub('<br />'," ", comments_combo$text_original)  #replace breaklines with space.
+    comments_combo$text_display <- gsub('<br />'," ", comments_combo$text_display)
     return(comments_combo)
   }else{
     comment22 <- dataframeFromJSON(comment2$items)
@@ -331,6 +358,10 @@ yt.SimpleVideoComments <- function(video_id = NULL){
     names(comment222) <- c("comment_ID", "video_ID", "author_display_name","author_channel_ID","text_display",
                            "text_original","dateTime", "updated_dateTime", "reply_count")
     comment222$pullDate <- Sys.time()
+    comment222$text_original <- gsub('\n'," ", comment222$text_original)  #replace breaklines with space.
+    comment222$text_display <- gsub('\n'," ", comment222$text_display)
+    comment222$text_original <- gsub('<br />'," ", comment222$text_original)  #replace breaklines with space.
+    comment222$text_display <- gsub('<br />'," ", comment222$text_display)
     return(comment222)
   }
 
@@ -345,7 +376,7 @@ yt.SimpleVideoComments <- function(video_id = NULL){
 #'@param published_before Date.  RFC 339 Format.  Example, "1970-01-01T00:00:00Z"
 #'@param published_after  Date.  RFC 339 Format.  Example, "1970-01-01T00:00:00Z"
 #'@export
-test.yt.ChannelComments <- function(channel_id=NULL, published_before=NULL, published_after=NULL){
+yt.ChannelComments <- function(channel_id=NULL, published_before=NULL, published_after=NULL){
   channelAct <- tuber::list_channel_activities(filter=c(channel_id = channel_id) ,part = "contentDetails",
                                                published_after = published_after,
                                                published_before = published_before)
