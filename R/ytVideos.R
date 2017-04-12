@@ -71,8 +71,33 @@ yt.related <- function(video_id){
 
 }
 
+#' Get Function for Collecting Related Videos from a YouTube Video
+#'
+#' Basic function, adapted from tuber package, get_related_videos()
+#' Used by other related videos functions in the ytcol package.  Getting related videos
+#' is considered a search to the YouTube API.
+#'
+#' @param video_id string; Required.  Video ID from YouTube.
+#' @param max_results  Maximum number of items that should be returned. Integer. Optional. Can be between 1 and 50. Default is 50.
+#' @param page_token  Specific page in the result set that should be returned. Optional.
+#' @param region_code  string.  Return search results for a specified country.  ISO 3166-1 alpha-2 country code.  Optional.
+#' @param safe_search  Character. Optional. Takes one of three values: \code{'moderate'}, \code{'none'} (default) or \code{'strict'}
+#' If none, search result not filtered.  If moderate, search result filtered for content restricted within your locale.
+#' If strict, search result filtered to exclude all restricted content from the search result set.
+#' @param \dots Additional arguments passed to \code{\link{tuber_GET}}.
+#' @return Nested named list.
+#' @export
+yt.GetRelated <- function (video_id = NULL, max_results = 50, page_token = NULL, region_code = NULL, safe_search = "none", ...){
+  if (!is.character(video_id)) stop("Must specify a video ID.")
+  if (max_results < 0 | max_results > 50) stop("max_results only takes a value between 0 and 50.")
 
+  querylist <- list(part="snippet", relatedToVideoId = video_id, type="video",
+                    maxResults=max_results, safeSearch = safe_search,
+                    pageToken = page_token, regionCode = region_code)
 
+  res <- ytcol::yt_GET("search", querylist, ...)
+  res
+}
 
 
 
