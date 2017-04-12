@@ -57,19 +57,39 @@ yt.singleVideoInfo <- function(video_id=NULL){
 #' Given a video ID, get up to 50 videos that are related.
 #'
 #' @param video_id  String.  Video ID from YouTube.
-#' @return Dataframe with the following variables: videoID, dateTime, channelID, title, description,
-#' channelTitle, and liveBroadcastContent
+#' @return Dataframe with the following variables: video_ID, dateTime, channel_ID, title, description,
+#' channel_title, and related_to
 #' @export
 yt.related <- function(video_id){
-  df <- tuber::get_related_videos(video_id = video_id)
-  df <- df[,-c(6:14)]
-  names(df)[2] <- "dateTime"
-  date <- format(Sys.time(),"%Y%m%d_%H%M")
-  write.csv(df, file=paste("./yt_collection/","related_",video_id,"_!_",date,".csv", sep = ""), row.names = FALSE)
-
-  return(df)
-
+  df <- ytcol::yt.GetRelated(video_id = video_id)
+  dff <- dataframeFromJSON(df$items)
+  rel_token <- df$nextPageToken
+  if(is.null(rel_token)){  #less than 50 related videos
+    dff <- dff[,-c(1,2,3,9:17,19)]
+    names(dff) <- c("video_ID","dateTime","channel_ID","title","description","channel_title")
+    dff$related_to <- video_id
+    date <- format(Sys.time(),"%Y%m%d_%H%M")
+    #write.csv(dff, file=paste("./yt_collection/","related_",video_id,"_!_",date,".csv", sep = ""), row.names = FALSE)
+    return(dff)
+  } else {  #more then 50 related videos
+    repeat{
+      df2 <- ytcol::yt.GetRelated(video_id = video_id, page_token = rel_token)
+      df22 <- dataframeFromJSON(df2$items)
+      dff <- gtools::smartbind(dff, df22)
+      rel_token <- df2$nextPageToken
+      if(is.null(rel_token)){
+        break
+      }
+    }
+    dff <- dff[,-c(1,2,3,9:17,19)]
+    names(dff) <- c("video_ID","dateTime","channel_ID","title","description","channel_title")
+    dff$related_to <- video_id
+    date <- format(Sys.time(),"%Y%m%d_%H%M")
+    #write.csv(dff, file=paste("./yt_collection/","related_",video_id,"_!_",date,".csv", sep = ""), row.names = FALSE)
+    return(dff)
+  }
 }
+
 
 #' Get Function for Collecting Related Videos from a YouTube Video
 #'

@@ -10,8 +10,8 @@ yt.related(video_id)
 \item{video_id}{String.  Video ID from YouTube.}
 }
 \value{
-Dataframe with the following variables: videoID, dateTime, channelID, title, description,
-channelTitle, and liveBroadcastContent
+Dataframe with the following variables: video_ID, dateTime, channel_ID, title, description,
+channel_title, and related_to
 }
 \description{
 Given a video ID, get up to 50 videos that are related.
