@@ -43,7 +43,7 @@ yt.AllChannelVideos <- function(channel_id=NULL, published_before=NULL, publishe
     df<-cbind(df,channelList)
     colnames(df)[which(colnames(df)=='contentDetails.upload.videoId')] <- "videoID"
     df<-df[,c("videoID","publishedAt","channelId","title","description","channelTitle")]
-    df <- distinct(df, videoID, .keep_all = TRUE)
+    df <- dplyr::distinct(df, videoID, .keep_all = TRUE)
     df <- na.omit(df)
     names(df) <- c("video_ID", "video_dateTime","channel_ID","video_title","video_description","channel_title")
     df$pullDate <- Sys.time()
@@ -98,7 +98,7 @@ yt.AllChannelVideos <- function(channel_id=NULL, published_before=NULL, publishe
   df<-cbind(df,channelList)
   colnames(df)[which(colnames(df)=='contentDetails.upload.videoId')] <- "videoID"
   df<-df[,c("videoID","publishedAt","channelId","title","description","channelTitle")]
-  df <- distinct(df, videoID, .keep_all = TRUE)
+  df <- dplyr::distinct(df, videoID, .keep_all = TRUE)
   df <- na.omit(df)
   names(df) <- c("video_ID", "video_dateTime","channel_ID","video_title","video_description","channel_title")
   df$pullDate <- Sys.time()

@@ -20,7 +20,7 @@ Most of the functions provide an output in the form of a dataframe and saves tha
 The first thing to understand about YouTube is that it is a collection of videos and channels.  A channel is equivalent to a user or account, and generally includes multiple videos.  Each video has statistics including views, likes, dislikes, favorites, and comments.  Each channel has a channel ID and some have vanity names that replace the channel ID in the URL for that channel.  Every video has a video ID.
 
 ### yt.AllChannelVidoes()
-The first function is to collect a list of all the videos from a channel, including the stats for each video.  This function allows you to set a date range for the collection using the "published_before" and "published_after" parameters.  Currently this function will only accept the channel ID, not channel vanity names.   This example collects all the videos from The Late Show with Steven Colbert channel during the first week of March 2017.
+This function is to collect a list of all the videos from a channel, including the stats for each video.  This function allows you to set a date range for the collection using the "published_before" and "published_after" parameters.  Currently this function will only accept the channel ID, not channel vanity names.   This example collects all the videos from The Late Show with Steven Colbert channel during the first week of March 2017.
 ```{r eval=FALSE}
 colbert <- yt.AllChannelVideos(channel_id = "UCMtFAi84ehTSYSE9XoHefig",
                                published_after = "2017-03-01T00:00:00Z",
@@ -46,7 +46,7 @@ bubba <- yt.singleVideoInfo(video_id = "tgchTz8XjrI")
 ```
 
 ### yt.related()
-This function collects a list of up to 50 videos that are related to another video. The output is an dataframe in the RStudio environment and a CSV file titled: "related_(video ID)_(date-time of collection).csv".
+This function collects a list of videos that are related to another video. The output is an dataframe in the RStudio environment and a CSV file titled: "related_(video ID)_(date-time of collection).csv".
 ```{r echo=FALSE}
 bubba_rel <- yt.related(video_id = "tgchTz8XjrI")
 ```
@@ -60,18 +60,19 @@ channel_id <- yt.GetChannelID(term = "TheBushCenter")
 
 
 ### yt.VideoComments()
-This function collects all the comments on a video on YouTube, including replies to comments.  The function requires a video ID.  The output is a dataframe in the RStudio environment per the designated name and a CSV file titled: "comments_(video ID)_(date-time of collection).csv".
+This function collects all the comments on a video on YouTube, including replies to comments.  If a comment is a reply, information about the parent comment is provided including parent comment ID, parent author display name, and parent author channel ID.  The function requires a video ID.  The output is a dataframe in the RStudio environment per the designated name and a CSV file titled: "comments_(video ID)_(date-time of collection).csv".
 ```{r echo = FALSE}
 bubba_comments <- yt.VideoComments(video_id = "tgchTz8XjrI")
 ```
 
 
 ### yt.ChannelComments()
-This function collects all the comments on all the videos on a channel on YouTube. This function allows you to set a date range for the collection using the "published_before" and "published_after" parameters.  Currently this function will only accept the channel ID, not channel vanity names.  The output is an dataframe in the RStudio environment and a CSV file titled: "channel_comments_(channel ID)_(date-time of pull).csv".
+This function collects all the comments, including replies, on all the videos on a channel on YouTube. This function allows you to set a date range for the collection using the "published_before" and "published_after" parameters.  Currently this function will only accept the channel ID, not channel vanity names.  The output is an dataframe in the RStudio environment and a CSV file titled: "channel_comments_(channel ID)_(date-time of pull).csv".
 ```{r echo = FALSE}
 colbert_channel_comments <- yt.ChannelComments(channel_id = "UCMtFAi84ehTSYSE9XoHefig",
                                                     published_after = "2017-03-01T00:00:00Z",
                                                     published_before = "2017-03-02T00:00:00Z")
 ```
 
-
+### yt.RelatedVideoComments()
+This function collects all the comments, including replies, on a video and the videos that result from the *yt.related()* function.  The output is an dataframe in the RStudio environment and a CSV file titled: "related_video_commments_(video ID)_(date-time of collection).csv".

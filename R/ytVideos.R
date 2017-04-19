@@ -34,7 +34,7 @@ getVideoDetailsDF <- function(video_id){
 #' @export
 #'
 
-yt.singleVideoInfo <- function(video_id=NULL){
+yt.SingleVideoInfo <- function(video_id=NULL){
   vidStat <- ytcol::getVideoStatsDF(video_id)
   vidDetail <- ytcol::getVideoDetailsDF(video_id)
   vidDetail <- vidDetail[,-c(6:17)]
@@ -46,7 +46,7 @@ yt.singleVideoInfo <- function(video_id=NULL){
   names(vidInfo)[1]<- c("videoID")
   names(vidInfo)[8]<- c("dateTime")
   date <- format(Sys.time(),"%Y%m%d_%H%M")
-  write.csv(df, file=paste("./yt_collection/","videoInfo_",video_id,"_!_",date,".csv", sep = ""), row.names = FALSE)
+  write.csv(vidInfo, file=paste("./yt_collection/","videoInfo_",video_id,"_!_",date,".csv", sep = ""), row.names = FALSE)
 
   return(vidInfo)
 }
@@ -54,13 +54,13 @@ yt.singleVideoInfo <- function(video_id=NULL){
 
 #' Get Related Videos
 #'
-#' Given a video ID, get up to 50 videos that are related.
+#' Given a video ID, get videos that are related.
 #'
 #' @param video_id  String.  Video ID from YouTube.
 #' @return Dataframe with the following variables: video_ID, dateTime, channel_ID, title, description,
 #' channel_title, and related_to
 #' @export
-yt.related <- function(video_id){
+yt.Related <- function(video_id){
   df <- ytcol::yt.GetRelated(video_id = video_id)
   dff <- dataframeFromJSON(df$items)
   rel_token <- df$nextPageToken
@@ -69,12 +69,15 @@ yt.related <- function(video_id){
     names(dff) <- c("video_ID","dateTime","channel_ID","title","description","channel_title")
     dff$related_to <- video_id
     date <- format(Sys.time(),"%Y%m%d_%H%M")
-    #write.csv(dff, file=paste("./yt_collection/","related_",video_id,"_!_",date,".csv", sep = ""), row.names = FALSE)
+    write.csv(dff, file=paste("./yt_collection/","related_",video_id,"_!_",date,".csv", sep = ""), row.names = FALSE)
     return(dff)
   } else {  #more then 50 related videos
     repeat{
       df2 <- ytcol::yt.GetRelated(video_id = video_id, page_token = rel_token)
       df22 <- dataframeFromJSON(df2$items)
+      if(nrow(df22)==0){
+        break
+      }
       dff <- gtools::smartbind(dff, df22)
       rel_token <- df2$nextPageToken
       if(is.null(rel_token)){
@@ -85,11 +88,10 @@ yt.related <- function(video_id){
     names(dff) <- c("video_ID","dateTime","channel_ID","title","description","channel_title")
     dff$related_to <- video_id
     date <- format(Sys.time(),"%Y%m%d_%H%M")
-    #write.csv(dff, file=paste("./yt_collection/","related_",video_id,"_!_",date,".csv", sep = ""), row.names = FALSE)
+    write.csv(dff, file=paste("./yt_collection/","related_",video_id,"_!_",date,".csv", sep = ""), row.names = FALSE)
     return(dff)
   }
 }
-
 
 #' Get Function for Collecting Related Videos from a YouTube Video
 #'
@@ -120,7 +122,33 @@ yt.GetRelated <- function (video_id = NULL, max_results = 50, page_token = NULL,
 }
 
 
-
+#' Get the Comments from Related Videos
+#'
+#' Given a video ID, get the comments from that video and videos that are related.
+#'
+#' @param video_id  String.  Video ID from YouTube.
+#' @return Dataframe with the following variables describing comments.
+#' @export
+yt.RelatedVideoComments <- function(video_id){
+  rel_vids <- ytcol::yt.Related(video_id = video_id)
+  list_of_video_ids <- as.character(rel_vids$video_ID)
+  list_of_video_ids <- c(list_of_video_ids,video_id)
+  comdf<-data.frame()
+  for (i in list_of_video_ids) {
+    comm <- try(ytcol::yt.SimpleVideoComments(i))
+    comdf <- gtools::smartbind(comdf,comm)
+  }
+  comdf$related_to <- video_id
+  comdf <- comdf[,c("comment_ID", "video_ID", "author_display_name","author_channel_ID","text_display",
+                    "text_original","dateTime", "updated_dateTime", "reply_count", "parent_comment_ID",
+                    "parent_author_display_name","parent_author_channel_ID","pullDate","related_to")]
+  comdf <- comdf[!is.na(comdf$comment_ID),]
+  comdf <- dplyr::distinct(comdf, comment_ID, .keep_all = TRUE)
+  date <- format(Sys.time(),"%Y%m%d_%H%M")
+  write.csv(comdf, file=paste("./yt_collection/","related_video_comments_",video_id,"_!_",date,".csv", sep = ""), row.names = FALSE)
+  print(paste0("Number of related videos: ",nrow(rel_vids)))
+  return(comdf)
+}
 
 
 

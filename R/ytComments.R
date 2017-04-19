@@ -159,7 +159,7 @@ yt.VideoComments <- function(video_id = NULL){
     list_of_parent_ids <- as.character(reply$parent_comment_ID)
     replydf<-data.frame()
     for (i in list_of_parent_ids) {
-      comreply <- try(test.yt.GetCommentReply(filter = c(parent_ID = i)))  ##max results is 100, get pageToken (check with sum(reply$reply_count))
+      comreply <- try(ytcol::yt.GetCommentReply(filter = c(parent_ID = i)))  ##max results is 100, get pageToken (check with sum(reply$reply_count))
       comreply <- dataframeFromJSON(comreply$items)
       replydf <- rbind(replydf, comreply)
     }
@@ -245,7 +245,7 @@ yt.SimpleVideoComments <- function(video_id = NULL){
       list_of_parent_ids <- as.character(reply$parent_comment_ID)
       replydf<-data.frame()
       for (i in list_of_parent_ids) {  #get replies to comments that have replies
-        comreply <- try(test.yt.GetCommentReply(filter = c(parent_ID = i)))  ##max results is 100, get pageToken (check with sum(reply$reply_count))
+        comreply <- try(ytcol::yt.GetCommentReply(filter = c(parent_ID = i)))  ##max results is 100, get pageToken (check with sum(reply$reply_count))
         comreply <- dataframeFromJSON(comreply$items)
         replydf <- rbind(replydf, comreply)
       }
@@ -319,7 +319,7 @@ yt.SimpleVideoComments <- function(video_id = NULL){
     list_of_parent_ids <- as.character(reply$parent_comment_ID)
     replydf<-data.frame()
     for (i in list_of_parent_ids) {
-      comreply <- try(test.yt.GetCommentReply(filter = c(parent_ID = i)))  ##max results is 100, get pageToken (check with sum(reply$reply_count))
+      comreply <- try(ytcol::yt.GetCommentReply(filter = c(parent_ID = i)))  ##max results is 100, get pageToken (check with sum(reply$reply_count))
       comreply <- dataframeFromJSON(comreply$items)
       replydf <- rbind(replydf, comreply)
     }
@@ -487,11 +487,11 @@ yt.GetCommentReply <- function (filter=NULL, part="snippet", text_format="html",
 
   res <- ytcol::yt_GET("comments", querylist, ...)
 
-  if (simplify==TRUE & part=="snippet") {
-    simple_res  <- lapply(res$items, function(x) unlist(x$snippet$topLevelComment$snippet))
-    simpler_res <- plyr::ldply(simple_res, rbind)
-    return(simpler_res)
-  }
+  # if (simplify==TRUE & part=="snippet") {
+  #   simple_res  <- lapply(res$items, function(x) unlist(x$snippet$topLevelComment$snippet))
+  #   simpler_res <- plyr::ldply(simple_res, rbind)
+  #   return(simpler_res)
+  #}
 
   res
 
