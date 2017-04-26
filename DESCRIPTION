@@ -15,5 +15,6 @@ Imports: tuber,
     gtools,
     ggplot2,
     dplyr,
-    httr
+    httr,
+    networkD3
 RoxygenNote: 6.0.1
