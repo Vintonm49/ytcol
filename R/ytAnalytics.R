@@ -10,6 +10,7 @@
 #' "author_display_name" and "video_ID".
 #' @param minVideos  Numeric for the minimum number of videos the author has commented on in the original set of related
 #' videos.  Default is 1. Subsets authors with greater than the minVideos numeric.
+#' @return Plots a network diagram with nodes being comment authors and video IDs.
 #' @export
 yt.Network <- function(relatedComments = NULL, minVideos = 1){
   edge <- relatedComments[,c("author_display_name","video_ID")]
@@ -48,4 +49,54 @@ yt.Network <- function(relatedComments = NULL, minVideos = 1){
                legend = TRUE,
                fontSize = 16)
 
+}
+
+
+#' Graphs of Comments on a Video Over Time
+#'
+#' This function produces two charts related to the temporal distribution
+#' of comments on a video over time.  The input to the function is the dataframe
+#' from the yt.VideoComments() function.  The first chart is a daily representation
+#' of number of comments each day, starting with the date of the first comment and ending
+#' on the date of the most recent comment.  The second chart is the cumulative number of
+#' comments on the video over time.
+#' @param videoComments  Dataframe object created with the yt.VideoComments() function.
+#' Must have the variables "author_display_name" and "dateTime".
+#' @param note  A string to put a note on the chart, such as the video ID or some other reference.
+#' @return Plots two charts, a histogram showing comment density over time and a cumulative line for total
+#' comments over time.
+#' @export
+yt.CommentsOverTime <- function(videoComments = NULL, note = NULL){
+  comDate <- videoComments[,c("author_display_name", "dateTime")]
+  comDate$dateTime <- as.Date(comDate$dateTime)
+  minDate <- min(comDate$dateTime)
+  maxDate <- max(comDate$dateTime)
+  allDate <- data.frame(days = seq(as.Date(minDate), as.Date(maxDate),by = "day"), stringsAsFactors = FALSE)
+  commentNums <- count(comDate, dateTime)
+  maxCom <- max(commentNums$n)
+  allDate <- dplyr::left_join(allDate,commentNums,by = c("days" ="dateTime"))
+  allDate[is.na(allDate)] <- 0
+  allDate$total <- cumsum(allDate$n)  #cumulative sum of comments over time
+  totalMax <- max(allDate$total)
+  datebreaks <- seq(as.Date(minDate),as.Date(maxDate), by="quarter")
+  p1<- ggplot2::ggplot(allDate,aes(x=days, y= n))+
+    geom_bar(color = 'blue', fill = 'blue', stat='identity') +
+    scale_x_date(breaks = datebreaks,labels = scales::date_format("%d %b %Y")) +
+    theme(axis.text.x = element_text(angle=90)) +
+    ggtitle("Comments Over Time") +
+    xlab("Date") +
+    ylab('# of Comments')+
+    annotate("text",x = minDate, y = maxCom-1, label = note, hjust = -.2)
+
+  #Plot cumulative count of comments over time
+  p2 <- ggplot2::ggplot(allDate,aes(x=days, y= total))+
+    geom_line() +
+    scale_x_date(breaks = datebreaks,labels = scales::date_format("%d %b %Y")) +
+    theme(axis.text.x = element_text(angle=90)) +
+    ggtitle("Cumulative Comments Over Time") +
+    xlab("Date") +
+    ylab('Total # of Comments') +
+    annotate("text",x = minDate, y = totalMax-1, label = note, hjust = -.2)
+
+  return(list(p1,p2))
 }
