@@ -29,26 +29,26 @@ colbert <- yt.AllChannelVideos(channel_id = "UCMtFAi84ehTSYSE9XoHefig",
 The results include 56 videos and the following information about each video:
 video ID, date-time posted, channel ID, title, description, channel title, date collected, view count, like count, dislike count, favorite count, comment count, tags, and language.  The output is an dataframe in the RStudio environment and a CSV file titled: "channel__(channel ID)_(date-time of pull).csv".
 
-### yt.search()
-This function collect a list of videos related to a search term, regardless of channel, and can be limited by a date range.  This example collects videos related to "golf" in the first week of March 2017.
+### yt.Search()
+This function collect a list of videos related to a search term, regardless of channel, and can be limited by a date range.  The user can also set the number of results that is returned, from 1 to 50, with the default being 50.  The result is a dataframe with the following information about each video:  video ID, date-time posted, channel ID, title, description, and channel title.  The output is an dataframe in the RStudio environment and a CSV file titled: "Search_(term)_(date-time of collection).csv".  This example collects videos related to "golf" in the first week of March 2017.
 ```{r echo = FALSE}
-golf <- yt.search(term="golf", 
+golf <- yt.Search(term="golf", 
                   published_after = "2017-03-01T00:00:00Z",
                   published_before = "2017-03-07T00:00:00Z")
 ```
-The results for this example include 431 videos and the following information about each video:  video ID, date-time posted, channel ID, title, description, and channel title.
 
 
-### yt.singleVideoInfo()
+
+### yt.SingleVideoInfo()
 This function will provide statistics for a video.  The results include video ID, view count, like count, dislike count, favorite count, comment count, date collected, date-time posted, channel ID, title, description, tags, and category ID.  This example collects information on a video featuring Bubba the Bichon Frise.  The output is an dataframe in the RStudio environment and a CSV file titled: "videoInfo_(video ID)_(date-time of collection).csv".
 ```{r echo=FALSE}
-bubba <- yt.singleVideoInfo(video_id = "tgchTz8XjrI")
+bubba <- yt.SingleVideoInfo(video_id = "tgchTz8XjrI")
 ```
 
-### yt.related()
+### yt.Related()
 This function collects a list of videos that are related to another video. The output is an dataframe in the RStudio environment and a CSV file titled: "related_(video ID)_(date-time of collection).csv".
 ```{r echo=FALSE}
-bubba_rel <- yt.related(video_id = "tgchTz8XjrI")
+bubba_rel <- yt.Related(video_id = "tgchTz8XjrI")
 ```
 
 
@@ -75,4 +75,15 @@ colbert_channel_comments <- yt.ChannelComments(channel_id = "UCMtFAi84ehTSYSE9Xo
 ```
 
 ### yt.RelatedVideoComments()
-This function collects all the comments, including replies, on a video and the videos that result from the *yt.related()* function.  The output is an dataframe in the RStudio environment and a CSV file titled: "related_video_commments_(video ID)_(date-time of collection).csv".
+This function collects all the comments, including replies, on a video and the videos that result from the *yt.Related()* function.  The output is an dataframe in the RStudio environment and a CSV file titled: "related_video_commments_(video ID)_(date-time of collection).csv".
+
+```{r echo = FALSE}
+bubba_rel_comments <- yt.RelatedVideoComments(video_id = "tgchTz8XjrI")
+```
+
+###yt.Network()
+This function generates a network diagram based on the results from the *yt.RelatedVideoComments()* function.  The nodes are videos and comment authors. The links represent the fact that an author has commented at least once on the video.  The midVideos parameter allows the user to reduce the size of the network by filtering for authors who commented on more than one video by setting that parameter to a number greater than 1.  
+```{r echo = FALSE}
+yt.Network(bubba_rel_comments, 7)
+```
+

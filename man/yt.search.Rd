@@ -6,7 +6,8 @@
 This function makes use of the yt_search function in the tuber package.
 and pulls all videos for the set term within the set date range.}
 \usage{
-yt.Search(term = NULL, published_before = NULL, published_after = NULL)
+yt.Search(term = NULL, published_before = NULL, published_after = NULL,
+  max_results = 50)
 }
 \arguments{
 \item{term}{String.}
@@ -16,7 +17,7 @@ yt.Search(term = NULL, published_before = NULL, published_after = NULL)
 \item{published_after}{Date.  RFC 339 Format.  Example, "1970-01-01T00:00:00Z"}
 }
 \value{
-A dataframe with x variables:
+A dataframe with 6 variables: \code{video_ID, dateTime, channel_ID, title, description, channel_title}
 }
 \description{
 Search YouTube for a key term with a date range

@@ -18,7 +18,7 @@ yt.Network(relatedComments = NULL, minVideos = 1)
 "author_display_name" and "video_ID".}
 
 \item{minVideos}{Numeric for the minimum number of videos the author has commented on in the original set of related
-videos.  Default is 1. Subsets authors with greater than the minVideos numeric.}
+videos.  Default is 1. Subsets authors with equal to or greater than the minVideos numeric.}
 }
 \value{
 Plots a network diagram with nodes being comment authors and video IDs.

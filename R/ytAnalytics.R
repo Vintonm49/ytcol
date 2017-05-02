@@ -9,7 +9,7 @@
 #' @param relatedComments  Dataframe object created with the yt.RelatedVideoComments function.  Must have the variables
 #' "author_display_name" and "video_ID".
 #' @param minVideos  Numeric for the minimum number of videos the author has commented on in the original set of related
-#' videos.  Default is 1. Subsets authors with greater than the minVideos numeric.
+#' videos.  Default is 1. Subsets authors with equal to or greater than the minVideos numeric.
 #' @return Plots a network diagram with nodes being comment authors and video IDs.
 #' @export
 yt.Network <- function(relatedComments = NULL, minVideos = 1){
@@ -18,7 +18,10 @@ yt.Network <- function(relatedComments = NULL, minVideos = 1){
   SumByDisplayName <- dplyr::summarise(group_by(relatedComments,author_display_name),
                                 numComments = n_distinct(comment_ID), numVids = n_distinct(video_ID))
   SumByDisplayName <- dplyr::arrange(SumByDisplayName, desc(numVids))
-  multi_vids <- subset(SumByDisplayName, numVids > minVideos)  #select only users with comments on at least x videos
+  if(minVideos > max(SumByDisplayName$numVids)) {
+    stop(paste0("minVideos parameter is too large.  Must be less than ", max(SumByDisplayName$numVids), sep=" "))
+  }
+  multi_vids <- subset(SumByDisplayName, numVids >= minVideos)  #select only users with comments on at least x videos
   multi_edge <- dplyr::semi_join(edge,multi_vids, by = "author_display_name")  #pair subset of authors with videos they comment on
   multi_edge_distinct <- dplyr::distinct(multi_edge)
   multi_edge_count <- dplyr::summarise(group_by(multi_edge,author_display_name), countVids = n())
