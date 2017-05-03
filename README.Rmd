@@ -7,7 +7,7 @@ date: "March 16, 2017"
 
 This R package provides data collection, cleaning, and visualization for YouTube data, accessed from the YouTube API.  
 
-The first step is to get authorization credentials for a Google App account, such as Gmail or YouTube, at <https://console.developers.google.com/projectselector/apis/credentials>.  Then you need to authenticate using the OAuth 2.0 credentials (client ID and client secret) with the YouTube API using the *yt_oauth* function in the **tuber** package.  Eventually, I will add at function to this package to do this so that the **tuber** package is not necessary.
+The first step is to get authorization credentials for a Google App account, such as Gmail or YouTube, at <https://console.developers.google.com/projectselector/apis/credentials>.  Then you need to authenticate using the OAuth 2.0 credentials (client ID and client secret) with the YouTube API using the *yt_oauth* function in the **tuber** package.  
 
 ```{r eval=FALSE}
 yt_oauth(client, secret)
