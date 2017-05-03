@@ -31,7 +31,7 @@ video ID, date-time posted, channel ID, title, description, channel title, date 
 
 ### yt.Search()
 This function collect a list of videos related to a search term, regardless of channel, and can be limited by a date range.  The user can also set the number of results that is returned, from 1 to 50, with the default being 50.  The result is a dataframe with the following information about each video:  video ID, date-time posted, channel ID, title, description, and channel title.  The output is an dataframe in the RStudio environment and a CSV file titled: "Search_(term)_(date-time of collection).csv".  This example collects videos related to "golf" in the first week of March 2017.
-```{r echo = FALSE}
+```{r eval = FALSE}
 golf <- yt.Search(term="golf", 
                   published_after = "2017-03-01T00:00:00Z",
                   published_before = "2017-03-07T00:00:00Z")
@@ -41,34 +41,34 @@ golf <- yt.Search(term="golf",
 
 ### yt.SingleVideoInfo()
 This function will provide statistics for a video.  The results include video ID, view count, like count, dislike count, favorite count, comment count, date collected, date-time posted, channel ID, title, description, tags, and category ID.  This example collects information on a video featuring Bubba the Bichon Frise.  The output is an dataframe in the RStudio environment and a CSV file titled: "videoInfo_(video ID)_(date-time of collection).csv".
-```{r echo=FALSE}
+```{r eval =FALSE}
 bubba <- yt.SingleVideoInfo(video_id = "tgchTz8XjrI")
 ```
 
 ### yt.Related()
 This function collects a list of videos that are related to another video. The output is an dataframe in the RStudio environment and a CSV file titled: "related_(video ID)_(date-time of collection).csv".
-```{r echo=FALSE}
+```{r eval =FALSE}
 bubba_rel <- yt.Related(video_id = "tgchTz8XjrI")
 ```
 
 
 ### yt.GetChannelID()
 This function converts the vanity name of a channel to the actual channel ID, which is needed to collect data from a channel.  If all you have is a vanity name of a channel, run this function first to get the channel ID, and then use that as the required parameter for the collection functions.  The output is an object in the RStudio environment.
-```{r echo=FALSE}
+```{r eval =FALSE}
 channel_id <- yt.GetChannelID(term = "TheBushCenter")
 ```
 
 
 ### yt.VideoComments()
 This function collects all the comments on a video on YouTube, including replies to comments.  If a comment is a reply, information about the parent comment is provided including parent comment ID, parent author display name, and parent author channel ID.  The function requires a video ID.  The output is a dataframe in the RStudio environment per the designated name and a CSV file titled: "comments_(video ID)_(date-time of collection).csv".
-```{r echo = FALSE}
+```{r eval = FALSE}
 bubba_comments <- yt.VideoComments(video_id = "tgchTz8XjrI")
 ```
 
 
 ### yt.ChannelComments()
 This function collects all the comments, including replies, on all the videos on a channel on YouTube. This function allows you to set a date range for the collection using the "published_before" and "published_after" parameters.  Currently this function will only accept the channel ID, not channel vanity names.  The output is an dataframe in the RStudio environment and a CSV file titled: "channel_comments_(channel ID)_(date-time of pull).csv".
-```{r echo = FALSE}
+```{r eval = FALSE}
 colbert_channel_comments <- yt.ChannelComments(channel_id = "UCMtFAi84ehTSYSE9XoHefig",
                                                     published_after = "2017-03-01T00:00:00Z",
                                                     published_before = "2017-03-02T00:00:00Z")
@@ -77,19 +77,21 @@ colbert_channel_comments <- yt.ChannelComments(channel_id = "UCMtFAi84ehTSYSE9Xo
 ### yt.RelatedVideoComments()
 This function collects all the comments, including replies, on a video and the videos that result from the *yt.Related()* function.  The output is an dataframe in the RStudio environment and a CSV file titled: "related_video_commments_(video ID)_(date-time of collection).csv".
 
-```{r echo = FALSE}
+```{r eval = FALSE}
 bubba_rel_comments <- yt.RelatedVideoComments(video_id = "tgchTz8XjrI")
 ```
 
 ###yt.Network()
 This function generates a network diagram using the dataframe produced by the *yt.RelatedVideoComments()* function.  The nodes are videos and comment authors. The links represent the fact that an author has commented at least once on the video.  The midVideos parameter allows the user to reduce the size of the network by filtering for authors who commented on more than one video by setting that parameter to a number greater than 1.  
-```{r echo = FALSE}
+```{r eval = FALSE}
 yt.Network(bubba_rel_comments, 7)
 ```
 
 yt.CommentsOverTime()
 This function generates two charts to visualize the distribution of comments on a video over time using the dataframe produced by the *yt.VideoComments()* function.  The videoComments parameter identifies the dataframe to use for the chart. The note parameter allows the user to make an annotation in the upper left corner of each chart.  The first chart, called "Comments Over Time", shows the number of comments per day, and the second chart, called "Cumulative Comments Over Time", shows the sum of the number of comments on a video as time progresses.  
-```{r echo = FALSE}
+```{r eval = FALSE}
 yt.CommentsOverTime(videoComments = bubba_comments, note = "video ID: tgchTz8XjrI")
 ```
+![](C:/Users/melanie.c.vinton/Documents/INSCOM/youTube/Comments over Time.png)
+![](C:/Users/melanie.c.vinton/Documents/INSCOM/youTube/Cumulative Comments.png)
 
