@@ -82,8 +82,14 @@ bubba_rel_comments <- yt.RelatedVideoComments(video_id = "tgchTz8XjrI")
 ```
 
 ###yt.Network()
-This function generates a network diagram based on the results from the *yt.RelatedVideoComments()* function.  The nodes are videos and comment authors. The links represent the fact that an author has commented at least once on the video.  The midVideos parameter allows the user to reduce the size of the network by filtering for authors who commented on more than one video by setting that parameter to a number greater than 1.  
+This function generates a network diagram using the dataframe produced by the *yt.RelatedVideoComments()* function.  The nodes are videos and comment authors. The links represent the fact that an author has commented at least once on the video.  The midVideos parameter allows the user to reduce the size of the network by filtering for authors who commented on more than one video by setting that parameter to a number greater than 1.  
 ```{r echo = FALSE}
 yt.Network(bubba_rel_comments, 7)
+```
+
+yt.CommentsOverTime()
+This function generates two charts to visualize the distribution of comments on a video over time using the dataframe produced by the *yt.VideoComments()* function.  The videoComments parameter identifies the dataframe to use for the chart. The note parameter allows the user to make an annotation in the upper left corner of each chart.  The first chart, called "Comments Over Time", shows the number of comments per day, and the second chart, called "Cumulative Comments Over Time", shows the sum of the number of comments on a video as time progresses.  
+```{r echo = FALSE}
+yt.CommentsOverTime(videoComments = bubba_comments, note = "video ID: tgchTz8XjrI")
 ```
 
