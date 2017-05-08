@@ -27,13 +27,21 @@ yt.AllChannelVideos <- function(channel_id=NULL, published_before=NULL, publishe
                                                 published_after = published_after)
   df <- ytcol::dataframeFromJSON(channelAct$items)
   if(ncol(df) > 4){
-    df$videoID <- ytcol::pasteNA(df$contentDetails.upload.videoId,df$contentDetails.playlistItem.resourceId.videoId,
-                         sep="", na.rm=TRUE)
-    df <- df[,c("kind","videoID")]
-
+    x <- grep(pattern = "videoid", ignore.case = T, x = names(df))
+    x3<- df[,x, drop = FALSE]
+    ncol(x3)
+    x3$videoID <- "NA"
+    for (j in 1:nrow(x3)){
+      for (i in 1:ncol(x3)){
+        if (is.na(x3[j,i])=="FALSE"){
+          x3$videoID[j] <- as.character(x3[j,i])
+        }
+      }
+    }
+    df <- x3[,"videoID", drop = FALSE]
 
   } else {
-    df <- df[,c(1,4)]
+    df <- df[,4, drop = FALSE]
   }
 
   token <- channelAct$nextPageToken
@@ -79,12 +87,22 @@ yt.AllChannelVideos <- function(channel_id=NULL, published_before=NULL, publishe
                                                      page_token = token)
     dff <- ytcol::dataframeFromJSON(channelActSub$items)
     if(ncol(dff) > 4){
-      dff$videoID <- ytcol::pasteNA(dff$contentDetails.upload.videoId, dff$contentDetails.playlistItem.resourceId.videoId,
-                            sep="", na.rm = TRUE)
-      dff <- dff[,c("kind","videoID")]
+      x <- grep(pattern = "videoid", ignore.case = T, x = names(dff))
+      x3<- dff[,x, drop = FALSE]
+      ncol(x3)
+      x3$videoID <- "NA"
+      for (j in 1:nrow(x3)){
+        for (i in 1:ncol(x3)){
+          if (is.na(x3[j,i])=="FALSE"){
+            x3$videoID[j] <- as.character(x3[j,i])
+          }
+        }
+      }
+      dff <- x3[,"videoID", drop = FALSE]
+      dff <- unique(dff)
 
     } else {
-      dff <- dff[,c(1,4)]
+      dff <- dff[,4, drop = FALSE]
     }
     df <- gtools::smartbind(df, dff)
     channelList <- gtools::smartbind(channelList,channelListSub)
@@ -122,6 +140,4 @@ yt.AllChannelVideos <- function(channel_id=NULL, published_before=NULL, publishe
 
   return(df)
 }
-
-
 
