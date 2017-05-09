@@ -66,10 +66,17 @@ yt.Network <- function(relatedComments = NULL, minVideos = 1){
 #' @param videoComments  Dataframe object created with the yt.VideoComments() function.
 #' Must have the variables "author_display_name" and "dateTime".
 #' @param note  A string to put a note on the chart, such as the video ID or some other reference.
+#' @param breakBy  String.  Set the breaks in the date sequence on the x-axis.  Takes one of five values:
+#' \code{'day','week','month','quarter','year'}
 #' @return Plots two charts, a histogram showing comment density over time and a cumulative line for total
 #' comments over time.
 #' @export
-yt.CommentsOverTime <- function(videoComments = NULL, note = NULL){
+yt.CommentsOverTime <- function(videoComments = NULL, note = "", breakBy = "day"){
+
+  if(!(breakBy %in% c("day","week","month","quarter","year"))){
+    stop("breakBy can only take the values: day, week, month, quarter, or year")
+  }
+
   comDate <- videoComments[,c("author_display_name", "dateTime")]
   comDate$dateTime <- as.Date(comDate$dateTime)
   minDate <- min(comDate$dateTime)
@@ -81,7 +88,7 @@ yt.CommentsOverTime <- function(videoComments = NULL, note = NULL){
   allDate[is.na(allDate)] <- 0
   allDate$total <- cumsum(allDate$n)  #cumulative sum of comments over time
   totalMax <- max(allDate$total)
-  datebreaks <- seq(as.Date(minDate),as.Date(maxDate), by="quarter")
+  datebreaks <- seq(as.Date(minDate),as.Date(maxDate), by=breakBy)
   p1<- ggplot2::ggplot(allDate,aes(x=days, y= n))+
     geom_bar(color = 'blue', fill = 'blue', stat='identity') +
     scale_x_date(breaks = datebreaks,labels = scales::date_format("%d %b %Y")) +

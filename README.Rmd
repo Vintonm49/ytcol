@@ -87,10 +87,10 @@ This function generates a network diagram using the dataframe produced by the *y
 yt.Network(bubba_rel_comments, 7)
 ```
 
-yt.CommentsOverTime()
-This function generates two charts to visualize the distribution of comments on a video over time using the dataframe produced by the *yt.VideoComments()* function.  The videoComments parameter identifies the dataframe to use for the chart. The note parameter allows the user to make an annotation in the upper left corner of each chart.  The first chart, called "Comments Over Time", shows the number of comments per day, and the second chart, called "Cumulative Comments Over Time", shows the sum of the number of comments on a video as time progresses.  
+###yt.CommentsOverTime()
+This function generates two charts to visualize the distribution of comments on a video over time using the dataframe produced by the *yt.VideoComments()* function.  The videoComments parameter identifies the dataframe to use for the chart. The note parameter allows the user to make an annotation in the upper left corner of each chart.  The breakBy parameter sets the breaks in the date sequence on the x-axis and can take the values day, week, month, quarter, or year.   The first chart, called "Comments Over Time", shows the number of comments per day, and the second chart, called "Cumulative Comments Over Time", shows the sum of the number of comments on a video as time progresses.  
 ```{r eval = FALSE}
-yt.CommentsOverTime(videoComments = bubba_comments, note = "video ID: tgchTz8XjrI")
+yt.CommentsOverTime(videoComments = bubba_comments, note = "video ID: tgchTz8XjrI", breakBy = "quarter")
 ```
 ![](C:/Users/melanie.c.vinton/Documents/INSCOM/youTube/Comments over Time.png)
 
