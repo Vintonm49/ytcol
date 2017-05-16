@@ -75,12 +75,29 @@ yt_check <-
 #'
 #' @param term  Vanity name.  String.  Required
 #' @export
-yt.GetChannelID <- function(term = NULL){
-  vanity <- tuber::yt_search(term = term, simplify = FALSE)
-  vanity <- ytcol::dataframeFromJSON(vanity$items)
-  vanity <- as.character(vanity[1,6])
-  return(vanity)
+yt.GetChannelID <- function(term = term, max_results = 1, type = "video", ...){
+  if (!is.character(term)) stop("Must specify a search term.\n")
 
+  if (max_results < 0 | max_results > 50) {
+    stop("max_results only takes a value between 0 and 50.")
+  }
+
+  #for queries with spaces
+  format_term <- paste0(unlist(strsplit(term, " ")), collapse = "%20")
+
+  querylist <- list(part = "snippet", q = format_term, maxResults = max_results, type = type)
+  # eliminated NULLs from querylist
+  querylist <- querylist[names(querylist)[sapply(querylist, function (x) !is.null(x))]]
+
+  res <- ytcol::yt_GET("search", querylist, ...)
+
+  if(res$pageInfo$totalResults != 0) {
+    res <- ytcol::dataframeFromJSON(res$items)
+    res <- as.character(res[1,6])
+    return(res)
+  } else {
+    return(data.frame())
+  }
 }
 
 #' Paste columns in a dataframe and suppress NAs

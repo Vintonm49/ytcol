@@ -4,7 +4,7 @@
 \alias{yt.GetChannelID}
 \title{Get YouTube Channel ID from Vanity or Legacy Name}
 \usage{
-yt.GetChannelID(term = NULL)
+yt.GetChannelID(term = term, max_results = 1, type = "video", ...)
 }
 \arguments{
 \item{term}{Vanity name.  String.  Required}
