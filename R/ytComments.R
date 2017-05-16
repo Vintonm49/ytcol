@@ -109,8 +109,8 @@ yt.VideoComments <- function(video_id = NULL){
       comments_combo$text_display <- gsub('\n'," ", comments_combo$text_display)
       comments_combo$text_original <- gsub('<br />'," ", comments_combo$text_original)  #replace breaklines with space.
       comments_combo$text_display <- gsub('<br />'," ", comments_combo$text_display)
-      date <- format(Sys.time(),"%Y%m%d_%H%M")
-      write.csv(comments_combo, file=paste("./yt_collection/","comments_",video_id,"_!_",date,".csv", sep = ""), row.names = FALSE)
+      #date <- format(Sys.time(),"%Y%m%d_%H%M")
+      #write.csv(comments_combo, file=paste("./yt_collection/","comments_",video_id,"_!_",date,".csv", sep = ""), row.names = FALSE)
       return(comments_combo)
     }else{  #number of replies is zero and token is NULL
       comment22 <- dataframeFromJSON(comment2$items)
@@ -126,8 +126,8 @@ yt.VideoComments <- function(video_id = NULL){
       comment222$text_display <- gsub('\n'," ", comment222$text_display)
       comment222$text_original <- gsub('<br />'," ", comment222$text_original)  #replace breaklines with space.
       comment222$text_display <- gsub('<br />'," ", comment222$text_display)
-      date <- format(Sys.time(),"%Y%m%d_%H%M")
-      write.csv(comment222, file=paste("./yt_collection/","comments_",video_id,"_!_",date,".csv", sep = ""), row.names = FALSE)
+      #date <- format(Sys.time(),"%Y%m%d_%H%M")
+      #write.csv(comment222, file=paste("./yt_collection/","comments_",video_id,"_!_",date,".csv", sep = ""), row.names = FALSE)
       return(comment222)
     }
 
@@ -188,8 +188,8 @@ yt.VideoComments <- function(video_id = NULL){
     comments_combo$text_original <- gsub('<br />'," ", comments_combo$text_original)  #replace breaklines with space.
     comments_combo$text_display <- gsub('<br />'," ", comments_combo$text_display)
 
-    date <- format(Sys.time(),"%Y%m%d_%H%M")
-    write.csv(comments_combo, file=paste("./yt_collection/","comments_",video_id,"_!_",date,".csv", sep = ""), row.names = FALSE)
+    #date <- format(Sys.time(),"%Y%m%d_%H%M")
+    #write.csv(comments_combo, file=paste("./yt_collection/","comments_",video_id,"_!_",date,".csv", sep = ""), row.names = FALSE)
     return(comments_combo)
   }else{
     comment22 <- dataframeFromJSON(comment2$items)
@@ -205,8 +205,8 @@ yt.VideoComments <- function(video_id = NULL){
     comment222$text_display <- gsub('\n'," ", comment222$text_display)
     comment222$text_original <- gsub('<br />'," ", comment222$text_original)  #replace breaklines with space.
     comment222$text_display <- gsub('<br />'," ", comment222$text_display)
-    date <- format(Sys.time(),"%Y%m%d_%H%M")
-    write.csv(comment222, file=paste("./yt_collection/","comments_",video_id,"_!_",date,".csv", sep = ""), row.names = FALSE)
+    #date <- format(Sys.time(),"%Y%m%d_%H%M")
+    #write.csv(comment222, file=paste("./yt_collection/","comments_",video_id,"_!_",date,".csv", sep = ""), row.names = FALSE)
     return(comment222)
   }
 
@@ -413,8 +413,8 @@ yt.ChannelComments <- function(channel_id=NULL, published_before=NULL, published
                       "text_original","dateTime", "updated_dateTime", "reply_count", "parent_comment_ID",
                       "parent_author_display_name","parent_author_channel_ID","pullDate")]
     comdf <- comdf[!is.na(comdf$comment_ID),]
-    date <- format(Sys.time(),"%Y%m%d_%H%M")
-    write.csv(comdf, file=paste("./yt_collection/","channel_comments_",channel_id,"_!_",date,".csv", sep = ""), row.names = FALSE)
+    #date <- format(Sys.time(),"%Y%m%d_%H%M")
+    #write.csv(comdf, file=paste("./yt_collection/","channel_comments_",channel_id,"_!_",date,".csv", sep = ""), row.names = FALSE)
     print(paste0("Number of videos: ",nrow(df)))
     return(comdf)
     break
@@ -460,8 +460,8 @@ yt.ChannelComments <- function(channel_id=NULL, published_before=NULL, published
                     "text_original","dateTime", "updated_dateTime", "reply_count", "parent_comment_ID",
                     "parent_author_display_name","parent_author_channel_ID","pullDate")]
   comdf <- comdf[!is.na(comdf$comment_ID),]
-  date <- format(Sys.time(),"%Y%m%d_%H%M")
-  write.csv(comdf, file=paste("./yt_collection/","channel_comments_",channel_id,"_!_",date,".csv", sep = ""), row.names = FALSE)
+  #date <- format(Sys.time(),"%Y%m%d_%H%M")
+  #write.csv(comdf, file=paste("./yt_collection/","channel_comments_",channel_id,"_!_",date,".csv", sep = ""), row.names = FALSE)
   print(paste0("Number of videos: ",nrow(df)))
   return(comdf)
 }

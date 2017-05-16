@@ -69,8 +69,8 @@ yt.AllChannelVideos <- function(channel_id=NULL, published_before=NULL, publishe
                         "thumbnails.medium.url","thumbnails.medium.width","thumbnails.medium.height",
                         "thumbnails.high.url","thumbnails.high.width","thumbnails.high.height")
     df <- df[,! names(df) %in% cols.dont.want, drop=F]
-    date <- format(Sys.time(),"%Y%m%d_%H%M")
-    write.csv(df, file=paste("./yt_collection/","channel_",channel_id,"_!_",date,".csv", sep = ""), row.names = FALSE)
+    #date <- format(Sys.time(),"%Y%m%d_%H%M")
+    #write.csv(df, file=paste("./yt_collection/","channel_",channel_id,"_!_",date,".csv", sep = ""), row.names = FALSE)
 
     return(df)
     break
@@ -135,8 +135,8 @@ yt.AllChannelVideos <- function(channel_id=NULL, published_before=NULL, publishe
                       "thumbnails.medium.url","thumbnails.medium.width","thumbnails.medium.height",
                       "thumbnails.high.url","thumbnails.high.width","thumbnails.high.height")
   df <- df[,! names(df) %in% cols.dont.want, drop=F]
-  date <- format(Sys.time(),"%Y%m%d_%H%M")
-  write.csv(df, file=paste("./yt_collection/","channel_",channel_id,"_!_",date,".csv", sep = ""), row.names = FALSE)
+  #date <- format(Sys.time(),"%Y%m%d_%H%M")
+  #write.csv(df, file=paste("./yt_collection/","channel_",channel_id,"_!_",date,".csv", sep = ""), row.names = FALSE)
 
   return(df)
 }

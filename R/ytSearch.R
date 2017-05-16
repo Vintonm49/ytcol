@@ -11,8 +11,8 @@ yt.Search <- function(term=NULL, published_before=NULL, published_after=NULL, ma
 
   search_vids <- ytcol::yt.GetSearch(term = term, published_before = published_before,
                                      published_after = published_after, max_results = max_results)
-  date <- format(Sys.time(),"%Y%m%d_%H%M")
-  write.csv(search_vids, file=paste("./yt_collection/","search_",term,"_!_",date,".csv", sep = ""), row.names = FALSE)
+  #date <- format(Sys.time(),"%Y%m%d_%H%M")
+  #write.csv(search_vids, file=paste("./yt_collection/","search_",term,"_!_",date,".csv", sep = ""), row.names = FALSE)
   return(search_vids)
 }
 

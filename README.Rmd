@@ -5,11 +5,24 @@ date: "March 16, 2017"
 
 # ARGOS - YouTube
 
-This R package provides data collection, cleaning, and visualization for YouTube data, accessed from the YouTube API.  
+This R package provides data collection, cleaning, and visualization for YouTube data, accessed from the YouTube API. 
 
-The first step is to get authorization credentials for a Google App account, such as Gmail or YouTube, at <https://console.developers.google.com/projectselector/apis/credentials>.  Then you need to authenticate using the OAuth 2.0 credentials (client ID and client secret) with the YouTube API using the *yt_oauth* function in the **tuber** package.  
+## Install the Package
+```{r eval = FALSE}
+install.packages(c("tuber","plyr","gtools","ggplot2","dplyr","httr","networkD3","scales"))
+token <- "xxxxxx"
+devtools::install_github("Vintonm49/ytcol", auth_token = token)
+```
+
+
+## Authentication
+The first step is to get authorization credentials for a Google App account, such as Gmail or YouTube, at <https://console.developers.google.com/projectselector/apis/credentials>.  You need to enable the YouTube APIs and the Freebase API.  When creating credentials for your project, select Oauth Client ID and application type "Other". For more details, see <https://developers.google.com/youtube/v3/getting-started>.
+
+Then you need to authenticate using the OAuth 2.0 credentials (client ID and client secret) with the YouTube API using the *yt_oauth* function in the **tuber** package.  The function looks for a \code{.httr-oauth} file in the working directory.  If that file is not in the working directory, it will try to authenticate with the client ID and secret by launching a browser to allow you to authorize the application.  This part of the process will not work from an AWS instance - you must have the correct file in the workind directory on AWS.  If you are working locally, you should select YES when asked if you want to save the httr-oauth file for later reference and click "Allow" on the browser to authorize the connection.
 
 ```{r eval=FALSE}
+client <- "xxxxxx"
+secret <- "yyyy"
 yt_oauth(client, secret)
 ```
 

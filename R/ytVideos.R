@@ -45,8 +45,8 @@ yt.SingleVideoInfo <- function(video_id=NULL){
   vidInfo <- vidInfo[,-c(8)]
   names(vidInfo)[1]<- c("videoID")
   names(vidInfo)[8]<- c("dateTime")
-  date <- format(Sys.time(),"%Y%m%d_%H%M")
-  write.csv(vidInfo, file=paste("./yt_collection/","videoInfo_",video_id,"_!_",date,".csv", sep = ""), row.names = FALSE)
+  #date <- format(Sys.time(),"%Y%m%d_%H%M")
+  #write.csv(vidInfo, file=paste("./yt_collection/","videoInfo_",video_id,"_!_",date,".csv", sep = ""), row.names = FALSE)
 
   return(vidInfo)
 }
@@ -68,8 +68,8 @@ yt.Related <- function(video_id){
     dff <- dff[,-c(1,2,3,9:17,19)]
     names(dff) <- c("video_ID","dateTime","channel_ID","title","description","channel_title")
     dff$related_to <- video_id
-    date <- format(Sys.time(),"%Y%m%d_%H%M")
-    write.csv(dff, file=paste("./yt_collection/","related_",video_id,"_!_",date,".csv", sep = ""), row.names = FALSE)
+    #date <- format(Sys.time(),"%Y%m%d_%H%M")
+    #write.csv(dff, file=paste("./yt_collection/","related_",video_id,"_!_",date,".csv", sep = ""), row.names = FALSE)
     return(dff)
   } else {  #more then 50 related videos
     repeat{
@@ -87,8 +87,8 @@ yt.Related <- function(video_id){
     dff <- dff[,-c(1,2,3,9:17,19)]
     names(dff) <- c("video_ID","dateTime","channel_ID","title","description","channel_title")
     dff$related_to <- video_id
-    date <- format(Sys.time(),"%Y%m%d_%H%M")
-    write.csv(dff, file=paste("./yt_collection/","related_",video_id,"_!_",date,".csv", sep = ""), row.names = FALSE)
+    #date <- format(Sys.time(),"%Y%m%d_%H%M")
+    #write.csv(dff, file=paste("./yt_collection/","related_",video_id,"_!_",date,".csv", sep = ""), row.names = FALSE)
     return(dff)
   }
 }
@@ -144,8 +144,8 @@ yt.RelatedVideoComments <- function(video_id){
                     "parent_author_display_name","parent_author_channel_ID","pullDate","related_to")]
   comdf <- comdf[!is.na(comdf$comment_ID),]
   comdf <- dplyr::distinct(comdf, comment_ID, .keep_all = TRUE)
-  date <- format(Sys.time(),"%Y%m%d_%H%M")
-  write.csv(comdf, file=paste("./yt_collection/","related_video_comments_",video_id,"_!_",date,".csv", sep = ""), row.names = FALSE)
+  #date <- format(Sys.time(),"%Y%m%d_%H%M")
+  #write.csv(comdf, file=paste("./yt_collection/","related_video_comments_",video_id,"_!_",date,".csv", sep = ""), row.names = FALSE)
   print(paste0("Number of related videos: ",nrow(rel_vids)))
   return(comdf)
 }
