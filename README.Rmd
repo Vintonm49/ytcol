@@ -95,9 +95,9 @@ bubba_rel_comments <- yt.RelatedVideoComments(video_id = "tgchTz8XjrI")
 ```
 
 ###yt.Network()
-This function generates a network diagram using the dataframe produced by the *yt.RelatedVideoComments()* function.  The nodes are videos and comment authors. The links represent the fact that an author has commented at least once on the video.  The midVideos parameter allows the user to reduce the size of the network by filtering for authors who commented on more than one video by setting that parameter to a number greater than 1.  The output is a network diagram in the RStudio environment.
+This function generates a network diagram using the dataframe produced by the *yt.RelatedVideoComments()* function.  The nodes are videos and comment authors. The links represent the fact that an author has commented at least once on the video.  The minVideos parameter allows the user to reduce the size of the network by filtering for authors who commented on more than one video by setting that parameter to a number greater than 1.  The output is a network diagram in the RStudio environment.
 ```{r eval = FALSE}
-yt.Network(bubba_rel_comments, 7)
+yt.Network(relatedComments = bubba_rel_comments, minVideos = 7)
 ```
 
 ###yt.CommentsOverTime()

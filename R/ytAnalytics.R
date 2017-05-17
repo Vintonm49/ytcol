@@ -1,4 +1,6 @@
 #' Network Diagram for Comments on Related Videos
+#'
+#'
 #' This function takes the dataframe created with the yt.RelatedVideoComments() function
 #' and generates a network diagram with the nodes being comment authors and videos.
 #' The size of the nodes for comment authors indicates the relative number of videos
@@ -6,11 +8,13 @@
 #' related video comments dataframe by authors that have commented on at least the minimum
 #' number of videos, so as to focus on authors who have commented on multiple videos as more
 #' interesting entities.
+#'
 #' @param relatedComments  Dataframe object created with the yt.RelatedVideoComments function.  Must have the variables
 #' "author_display_name" and "video_ID".
 #' @param minVideos  Numeric for the minimum number of videos the author has commented on in the original set of related
 #' videos.  Default is 1. Subsets authors with equal to or greater than the minVideos numeric.
 #' @return Plots a network diagram with nodes being comment authors and video IDs.
+#' @example \dontrun{yt.Network(relatedComments = df, minVideos = 3)}
 #' @export
 yt.Network <- function(relatedComments = NULL, minVideos = 1){
   edge <- relatedComments[,c("author_display_name","video_ID")]
@@ -70,6 +74,7 @@ yt.Network <- function(relatedComments = NULL, minVideos = 1){
 #' \code{'day','week','month','quarter','year'}
 #' @return Plots two charts, a histogram showing comment density over time and a cumulative line for total
 #' comments over time.
+#' @example \dontrun{yt.CommentsOverTime(videoComments = df, note = "video name: abc", breakBy = "week")}
 #' @export
 yt.CommentsOverTime <- function(videoComments = NULL, note = "", breakBy = "day"){
 

@@ -1,8 +1,10 @@
 #' Underlying Function to Get Comments on a Video on YouTube
-#' Basic function, adapted from tuber package, get_comment_threads()
-#' Used by other comment functions in the ytcol package
 #'
-#' @param filter string; Required.
+#'
+#' Basic function, adapted from tuber package, get_comment_threads().
+#' Used by other comment functions in the ytcol package.
+#'
+#' @param filter Character; Required.
 #' named vector of length 1
 #' potential names of the entry in the vector:
 #' \code{video_id}: video ID.
@@ -10,12 +12,12 @@
 #' \code{thread_id}: comma-separated list of comment thread IDs
 #' \code{threads_related_to_channel}: channel ID.
 #'
-#' @param part  Comment resource requested. Required. Comma separated list of one or more of the
+#' @param part  Character. Comment resource requested. Required. Comma separated list of one or more of the
 #' following: \code{id, snippet}. e.g., \code{"id, snippet"}, \code{"id"}, etc. Default: \code{snippet}.
-#' @param max_results  Maximum number of items that should be returned. Integer. Optional. Can be between 20 and 100. Default is 100.
-#' @param page_token  Specific page in the result set that should be returned. Optional.
-#' @param text_format Data Type: Character. Default is \code{"html"}. Only takes \code{"html"} or \code{"plainText"}. Optional.
-#' @param simplify Data Type: Boolean. Default is \code{TRUE}. If \code{TRUE}, the function returns a data frame. Else a list with all the information returned.
+#' @param max_results  Integer. Maximum number of items that should be returned. Integer. Optional. Can be between 20 and 100. Default is 100.
+#' @param page_token  Character. Specific page in the result set that should be returned. Optional.
+#' @param text_format Character. Default is \code{"html"}. Only takes \code{"html"} or \code{"plainText"}. Optional.
+#' @param simplify Boolean. Default is \code{TRUE}. If \code{TRUE}, the function returns a data frame. Else a list with all the information returned.
 #' @param \dots Additional arguments passed to \code{\link{tuber_GET}}.
 #' @return Nested named list.
 #' @export
@@ -52,9 +54,11 @@ yt.GetComments <- function (filter=NULL, part="snippet", text_format="html", sim
 #'This function collects all the comments on a video on YouTube.
 #' It calls the yt.GetComments function in the ytcol package.
 #'
-#' @param video_id String.  Video ID from YouTube.
-#' @return Dataframe with variables including author information, comment text, date-time posted,
-#' and date-time updated.
+#' @param video_id Character.  Video ID from YouTube. Required.
+#' @return Dataframe with variables including: \code{comment_ID, video_ID, author_display_name, author_channel_ID,
+#' text_display, text_original, dateTime, updated_dateTime, reply_count, parent_comment_ID, parent_author_display_name,
+#' parent_author_channel_ID, pullDate}
+#' @example \dontrun {yt.VideoComments(video_id = "D69yJub7Uuo")}
 #' @export
 yt.VideoComments <- function(video_id = NULL){
   comment1 <- ytcol::yt.GetComments(filter=c(video_id = video_id))
@@ -216,8 +220,8 @@ yt.VideoComments <- function(video_id = NULL){
 #' Utility for Getting Video Comments
 #'
 #' This function is a utility to be used in other functions to get comments for multiple
-#' videos.  Internal use.  Eliminates the save to CSV portion of the yt.VideoComments function.
-#' @param video_id  String.  Video ID from YouTube.
+#' videos.  Internal use.  Eliminates the save to CSV portion (now eliminated) of the yt.VideoComments function.
+#' @param video_id  Character.  Video ID from YouTube. Required.
 #' @export
 #'
 yt.SimpleVideoComments <- function(video_id = NULL){
@@ -372,9 +376,11 @@ yt.SimpleVideoComments <- function(video_id = NULL){
 #' This function collects all the comments from all the videos on a channel,
 #' within a time frame if set.
 #'
-#'@param channel_id  String.  The YouTube channel ID.  Cannot be the vanity URL name.
-#'@param published_before Date.  RFC 339 Format.  Example, "1970-01-01T00:00:00Z"
-#'@param published_after  Date.  RFC 339 Format.  Example, "1970-01-01T00:00:00Z"
+#'@param channel_id  Character.  The YouTube channel ID.  Cannot be the vanity URL name. Required.
+#'@param published_before Date.  Optional. RFC 339 Format.  Example, "1970-01-01T00:00:00Z"
+#'@param published_after  Date.  Optional. RFC 339 Format.  Example, "1970-01-01T00:00:00Z"
+#'@example \dontrun{yt.ChannelComments(channel_id = "UCLRYsOHrkk5qcIhtq033bLQ", published_after = "2016-01-01T00:00:00Z",
+#'published_before = "2017-11-09T00:00:00Z")}
 #'@export
 yt.ChannelComments <- function(channel_id=NULL, published_before=NULL, published_after=NULL){
   channelAct <- tuber::list_channel_activities(filter=c(channel_id = channel_id) ,part = "contentDetails",
@@ -471,19 +477,19 @@ yt.ChannelComments <- function(channel_id=NULL, published_before=NULL, published
 
 #' Get Function for Collecting Comment Replies from a YouTube Video
 #'
-#' Basic function, adapted from tuber package, get_comments()
-#' Used by other comment functions in the ytcol package
+#' Basic function, adapted from tuber package, get_comments().
+#' Used by other comment functions in the ytcol package.
 #'
-#' @param filter string; Required.
+#' @param filter Character; Required.
 #' named vector of length 1
 #' potential names of the entry in the vector:
 #' \code{comment_ID}: comment ID.
 #' \code{parent_ID}: parent comment ID.
-#' @param part  Comment resource requested. Required. Comma separated list of one or more of the
+#' @param part  Character. Comment resource requested. Required. Comma separated list of one or more of the
 #' following: \code{id, snippet}. e.g., \code{"id, snippet"}, \code{"id"}, etc. Default: \code{snippet}.
-#' @param max_results  Maximum number of items that should be returned. Integer. Optional. Can be between 20 and 100. Default is 100.
-#' @param page_token  Specific page in the result set that should be returned. Optional.
-#' @param text_format Data Type: Character. Default is \code{"html"}. Only takes \code{"html"} or \code{"plainText"}. Optional.
+#' @param max_results  Integer. Maximum number of items that should be returned. Integer. Optional. Can be between 20 and 100. Default is 100.
+#' @param page_token  Character. Specific page in the result set that should be returned. Optional.
+#' @param text_format Character. Default is \code{"html"}. Only takes \code{"html"} or \code{"plainText"}. Optional.
 #' @param \dots Additional arguments passed to \code{\link{tuber_GET}}.
 #' @return Nested named list.
 #' @export

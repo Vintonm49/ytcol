@@ -2,14 +2,7 @@
 % Please edit documentation in R/ytAnalytics.R
 \name{yt.Network}
 \alias{yt.Network}
-\title{Network Diagram for Comments on Related Videos
-This function takes the dataframe created with the yt.RelatedVideoComments() function
-and generates a network diagram with the nodes being comment authors and videos.
-The size of the nodes for comment authors indicates the relative number of videos
-that author has commented on in the original set of related videos.  The function subsets the
-related video comments dataframe by authors that have commented on at least the minimum
-number of videos, so as to focus on authors who have commented on multiple videos as more
-interesting entities.}
+\title{Network Diagram for Comments on Related Videos}
 \usage{
 yt.Network(relatedComments = NULL, minVideos = 1)
 }
@@ -24,7 +17,6 @@ videos.  Default is 1. Subsets authors with equal to or greater than the minVide
 Plots a network diagram with nodes being comment authors and video IDs.
 }
 \description{
-Network Diagram for Comments on Related Videos
 This function takes the dataframe created with the yt.RelatedVideoComments() function
 and generates a network diagram with the nodes being comment authors and videos.
 The size of the nodes for comment authors indicates the relative number of videos

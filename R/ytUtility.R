@@ -73,9 +73,10 @@ yt_check <-
 #' any data from the channel, the API will not accept the vanity name.  This function
 #' provides the channel ID for a channel, given the vanity name.
 #'
-#' @param term  Vanity name.  String.  Required
+#' @param term  Character. Vanity name. Required.
 #' @export
-yt.GetChannelID <- function(term = term, max_results = 1, type = "video", ...){
+#' @example \dontrun{yt.GetChannelID(term = "CNN")}
+yt.GetChannelID <- function(term = term,  ...){
   if (!is.character(term)) stop("Must specify a search term.\n")
 
   if (max_results < 0 | max_results > 50) {
@@ -85,7 +86,7 @@ yt.GetChannelID <- function(term = term, max_results = 1, type = "video", ...){
   #for queries with spaces
   format_term <- paste0(unlist(strsplit(term, " ")), collapse = "%20")
 
-  querylist <- list(part = "snippet", q = format_term, maxResults = max_results, type = type)
+  querylist <- list(part = "snippet", q = format_term, maxResults = 1, type = "channel")
   # eliminated NULLs from querylist
   querylist <- querylist[names(querylist)[sapply(querylist, function (x) !is.null(x))]]
 

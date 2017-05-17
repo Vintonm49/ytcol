@@ -8,15 +8,16 @@
 #' a certain date, and between two dates.  In the output, the dateTime is when the video was posted
 #' and the pullDate is when the function was executed.
 #'
-#' @param channel_id  String.  The YouTube channel ID.  Cannot be the vanity URL name.
+#' @param channel_id  Character.  The YouTube channel ID.  Cannot be the vanity URL name. Required.
 #' @param published_before Date.  RFC 339 Format.  Example, "1970-01-01T00:00:00Z"
 #' @param published_after  Date.  RFC 339 Format.  Example, "1970-01-01T00:00:00Z"
-#' @return A dataframe with multiple variables:  videoID, dateTime, channelID, title, description, channelTitle, pullDate,
+#' @return A dataframe with multiple variables: \code{videoID, dateTime, channelID, title, description, channelTitle, pullDate,
 #' viewCount, likeCount, dislikeCount, favoriteCount, commentCount, tags, categoryID, liveBroadcastContent,
-#' defaultLanguage, localized.title, localized.description, defaultAudioLanguage
+#' defaultLanguage, localized.title, localized.description, defaultAudioLanguage}
 #' @export
-#' @examples
-#' yt.AllChannelVideos(channel_id, published_before, published_after)
+#' @example
+#' yt.AllChannelVideos(channel_id = "UCLRYsOHrkk5qcIhtq033bLQ", published_before = "2016-11-09T00:00:00Z",
+#' published_after = "2016-01-01T00:00:00Z")
 yt.AllChannelVideos <- function(channel_id=NULL, published_before=NULL, published_after=NULL){
 
   channelAct <- tuber::list_channel_activities(filter=c(channel_id = channel_id) ,part = "contentDetails",

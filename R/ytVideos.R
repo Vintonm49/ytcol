@@ -1,8 +1,10 @@
 #' Get statistics for a video on YouTube
+#'
 #' This function takes a YouTube video ID and returns in a dataframe
 #' statistics like views, likes, and dislikes.
-#' @param l video_id  String.
-#' @return A dataframe.
+#' @param l video_id  Character. Video ID from YouTube. Required.
+#' @return A dataframe with multiple variables: \code{id, viewCount, likeCount, dislikeCount, favoriteCount,
+#' commentCount, pullDate}
 #' @export
 getVideoStatsDF <- function(video_id){
   stats <- as.data.frame(get_stats(video_id))
@@ -10,11 +12,16 @@ getVideoStatsDF <- function(video_id){
   return(stats)
 }
 
+
 #' Get details for a video on YouTube
+#'
 #' This function takes a YouTube video ID and returns details in a dataframe
-#' like date published, channel ID, title, description, channel title, category ID, and tags.
-#' @param l video_id  String.
-#' @return A dataframe.
+#' including date published, channel ID, title, description, channel title, category ID, and tags.
+#' It is used by other video related functions in the package.
+#'
+#' @param l video_id  Character.  Video ID from YouTube.  Required.
+#' @return A dataframe with multiple variables:\code{id, publishedAt, channelId, title, description,
+#' thumbnail data, tags, categoryId, liveBroadcastContent, localized.title, localized.description}
 #' @export
 getVideoDetailsDF <- function(video_id){
   details <- get_video_details(video_id)
@@ -27,10 +34,10 @@ getVideoDetailsDF <- function(video_id){
 #' and returns a dataframe with both sets of information for
 #' a single video.  Requires the video ID.
 #'
-#' @param video_id  String.  Video ID from YouTube.
-#' @return Dataframe with the following variables: videoID, viewCount, like Count, dislikeCount,
+#' @param video_id  Character.  Video ID from YouTube. Required.
+#' @return Dataframe with the following variables: \code{videoID, viewCount, like Count, dislikeCount,
 #' favoriteCount, commentCount, pullDate, dateTime, channelID, title, description, tags,
-#' liveBroadcastContent, localized.title, localized.description
+#' liveBroadcastContent, localized.title, localized.description}
 #' @export
 #'
 
@@ -54,11 +61,12 @@ yt.SingleVideoInfo <- function(video_id=NULL){
 
 #' Get Related Videos
 #'
-#' Given a video ID, get videos that are related.
+#' Given a video ID, get other videos that are related.
 #'
-#' @param video_id  String.  Video ID from YouTube.
-#' @return Dataframe with the following variables: video_ID, dateTime, channel_ID, title, description,
-#' channel_title, and related_to
+#' @param video_id  Character.  Video ID from YouTube. Required.
+#' @return Dataframe with the following variables: \code{video_ID, dateTime, channel_ID, title, description,
+#' channel_title, and related_to}
+#' @example \dontrun{yt.Related(video_id = "0uY7gLZDmn4"}
 #' @export
 yt.Related <- function(video_id){
   df <- ytcol::yt.GetRelated(video_id = video_id)
@@ -95,14 +103,14 @@ yt.Related <- function(video_id){
 
 #' Get Function for Collecting Related Videos from a YouTube Video
 #'
-#' Basic function, adapted from tuber package, get_related_videos()
+#' Basic function, adapted from tuber package, get_related_videos().
 #' Used by other related videos functions in the ytcol package.  Getting related videos
 #' is considered a search to the YouTube API.
 #'
-#' @param video_id string; Required.  Video ID from YouTube.
-#' @param max_results  Maximum number of items that should be returned. Integer. Optional. Can be between 1 and 50. Default is 50.
-#' @param page_token  Specific page in the result set that should be returned. Optional.
-#' @param region_code  string.  Return search results for a specified country.  ISO 3166-1 alpha-2 country code.  Optional.
+#' @param video_id Character; Required.  Video ID from YouTube.
+#' @param max_results  Integer. Maximum number of items that should be returned. Integer. Optional. Can be between 1 and 50. Default is 50.
+#' @param page_token  Character. Specific page in the result set that should be returned. Optional.
+#' @param region_code  Character.   Return search results for a specified country.  ISO 3166-1 alpha-2 country code.  Optional.
 #' @param safe_search  Character. Optional. Takes one of three values: \code{'moderate'}, \code{'none'} (default) or \code{'strict'}
 #' If none, search result not filtered.  If moderate, search result filtered for content restricted within your locale.
 #' If strict, search result filtered to exclude all restricted content from the search result set.
@@ -126,8 +134,10 @@ yt.GetRelated <- function (video_id = NULL, max_results = 50, page_token = NULL,
 #'
 #' Given a video ID, get the comments from that video and videos that are related.
 #'
-#' @param video_id  String.  Video ID from YouTube.
-#' @return Dataframe with the following variables describing comments.
+#' @param video_id  Character.  Video ID from YouTube. Required.
+#' @return Dataframe with the following variables describing comments: \code{comment_ID, video_ID, author_display_name,
+#' author_channel_ID, text_display, text_original, dateTime, updated dateTime, reply_count, parent_comment_ID,
+#' parent_author_display_name, parent_author_channel_ID, pullDate, related_to}
 #' @export
 yt.RelatedVideoComments <- function(video_id){
   rel_vids <- ytcol::yt.Related(video_id = video_id)
