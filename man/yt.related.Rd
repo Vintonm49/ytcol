@@ -7,12 +7,12 @@
 yt.Related(video_id)
 }
 \arguments{
-\item{video_id}{String.  Video ID from YouTube.}
+\item{video_id}{Character.  Video ID from YouTube. Required.}
 }
 \value{
-Dataframe with the following variables: video_ID, dateTime, channel_ID, title, description,
-channel_title, and related_to
+Dataframe with the following variables: \code{video_ID, dateTime, channel_ID, title, description,
+channel_title, and related_to}
 }
 \description{
-Given a video ID, get videos that are related.
+Given a video ID, get other videos that are related.
 }

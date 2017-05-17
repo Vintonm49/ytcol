@@ -8,23 +8,20 @@ yt.AllChannelVideos(channel_id = NULL, published_before = NULL,
   published_after = NULL)
 }
 \arguments{
-\item{channel_id}{String.  The YouTube channel ID.  Cannot be the vanity URL name.}
+\item{channel_id}{Character.  The YouTube channel ID.  Cannot be the vanity URL name. Required.}
 
 \item{published_before}{Date.  RFC 339 Format.  Example, "1970-01-01T00:00:00Z"}
 
 \item{published_after}{Date.  RFC 339 Format.  Example, "1970-01-01T00:00:00Z"}
 }
 \value{
-A dataframe with multiple variables:  videoID, dateTime, channelID, title, description, channelTitle, pullDate,
+A dataframe with multiple variables: \code{videoID, dateTime, channelID, title, description, channelTitle, pullDate,
 viewCount, likeCount, dislikeCount, favoriteCount, commentCount, tags, categoryID, liveBroadcastContent,
-defaultLanguage, localized.title, localized.description, defaultAudioLanguage
+defaultLanguage, localized.title, localized.description, defaultAudioLanguage}
 }
 \description{
 This function gets a list of videos from a YouTube channel.  It requires the channel ID
 and allows the user to set a date range, including before a certain date, after
 a certain date, and between two dates.  In the output, the dateTime is when the video was posted
 and the pullDate is when the function was executed.
-}
-\examples{
-yt.AllChannelVideos(channel_id, published_before, published_after)
 }

@@ -8,11 +8,11 @@ yt.ChannelComments(channel_id = NULL, published_before = NULL,
   published_after = NULL)
 }
 \arguments{
-\item{channel_id}{String.  The YouTube channel ID.  Cannot be the vanity URL name.}
+\item{channel_id}{Character.  The YouTube channel ID.  Cannot be the vanity URL name. Required.}
 
-\item{published_before}{Date.  RFC 339 Format.  Example, "1970-01-01T00:00:00Z"}
+\item{published_before}{Date.  Optional. RFC 339 Format.  Example, "1970-01-01T00:00:00Z"}
 
-\item{published_after}{Date.  RFC 339 Format.  Example, "1970-01-01T00:00:00Z"}
+\item{published_after}{Date.  Optional. RFC 339 Format.  Example, "1970-01-01T00:00:00Z"}
 }
 \description{
 This function collects all the comments from all the videos on a channel,

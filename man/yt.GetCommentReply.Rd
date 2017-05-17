@@ -8,20 +8,20 @@ yt.GetCommentReply(filter = NULL, part = "snippet", text_format = "html",
   max_results = 100, page_token = NULL, ...)
 }
 \arguments{
-\item{filter}{string; Required.
+\item{filter}{Character; Required.
 named vector of length 1
 potential names of the entry in the vector:
 \code{comment_ID}: comment ID.
 \code{parent_ID}: parent comment ID.}
 
-\item{part}{Comment resource requested. Required. Comma separated list of one or more of the
+\item{part}{Character. Comment resource requested. Required. Comma separated list of one or more of the
 following: \code{id, snippet}. e.g., \code{"id, snippet"}, \code{"id"}, etc. Default: \code{snippet}.}
 
-\item{text_format}{Data Type: Character. Default is \code{"html"}. Only takes \code{"html"} or \code{"plainText"}. Optional.}
+\item{text_format}{Character. Default is \code{"html"}. Only takes \code{"html"} or \code{"plainText"}. Optional.}
 
-\item{max_results}{Maximum number of items that should be returned. Integer. Optional. Can be between 20 and 100. Default is 100.}
+\item{max_results}{Integer. Maximum number of items that should be returned. Integer. Optional. Can be between 20 and 100. Default is 100.}
 
-\item{page_token}{Specific page in the result set that should be returned. Optional.}
+\item{page_token}{Character. Specific page in the result set that should be returned. Optional.}
 
 \item{\dots}{Additional arguments passed to \code{\link{tuber_GET}}.}
 }
@@ -29,6 +29,6 @@ following: \code{id, snippet}. e.g., \code{"id, snippet"}, \code{"id"}, etc. Def
 Nested named list.
 }
 \description{
-Basic function, adapted from tuber package, get_comments()
-Used by other comment functions in the ytcol package
+Basic function, adapted from tuber package, get_comments().
+Used by other comment functions in the ytcol package.
 }

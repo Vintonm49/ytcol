@@ -2,20 +2,18 @@
 % Please edit documentation in R/ytVideos.R
 \name{getVideoStatsDF}
 \alias{getVideoStatsDF}
-\title{Get statistics for a video on YouTube
-This function takes a YouTube video ID and returns in a dataframe
-statistics like views, likes, and dislikes.}
+\title{Get statistics for a video on YouTube}
 \usage{
 getVideoStatsDF(video_id)
 }
 \arguments{
-\item{l}{video_id  String.}
+\item{l}{video_id  Character. Video ID from YouTube. Required.}
 }
 \value{
-A dataframe.
+A dataframe with multiple variables: \code{id, viewCount, likeCount, dislikeCount, favoriteCount,
+commentCount, pullDate}
 }
 \description{
-Get statistics for a video on YouTube
 This function takes a YouTube video ID and returns in a dataframe
 statistics like views, likes, and dislikes.
 }

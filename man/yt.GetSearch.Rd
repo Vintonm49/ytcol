@@ -8,9 +8,9 @@ yt.GetSearch(term = term, max_results = max_results,
   published_after = NULL, published_before = NULL, type = "video", ...)
 }
 \arguments{
-\item{term}{Search term.  Character. Required.  No default.}
+\item{term}{Character.  Search term. Required.  No default.}
 
-\item{max_results}{Maximum number of items returned. Integer. Can be between 0 and 50. Default is 50.}
+\item{max_results}{Integer. Maximum number of items returned. Can be between 1 and 50. Default is 50.}
 
 \item{published_after}{Date. Optional. RFC 339 Format.  Example, "1970-01-01T00:00:00Z"}
 

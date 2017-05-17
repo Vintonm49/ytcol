@@ -7,9 +7,9 @@
 yt.SimpleVideoComments(video_id = NULL)
 }
 \arguments{
-\item{video_id}{String.  Video ID from YouTube.}
+\item{video_id}{Character.  Video ID from YouTube. Required.}
 }
 \description{
 This function is a utility to be used in other functions to get comments for multiple
-videos.  Internal use.  Eliminates the save to CSV portion of the yt.VideoComments function.
+videos.  Internal use.  Eliminates the save to CSV portion (now eliminated) of the yt.VideoComments function.
 }

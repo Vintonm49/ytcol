@@ -7,10 +7,12 @@
 yt.RelatedVideoComments(video_id)
 }
 \arguments{
-\item{video_id}{String.  Video ID from YouTube.}
+\item{video_id}{Character.  Video ID from YouTube. Required.}
 }
 \value{
-Dataframe with the following variables describing comments.
+Dataframe with the following variables describing comments: \code{comment_ID, video_ID, author_display_name,
+author_channel_ID, text_display, text_original, dateTime, updated dateTime, reply_count, parent_comment_ID,
+parent_author_display_name, parent_author_channel_ID, pullDate, related_to}
 }
 \description{
 Given a video ID, get the comments from that video and videos that are related.

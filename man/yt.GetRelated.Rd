@@ -8,13 +8,13 @@ yt.GetRelated(video_id = NULL, max_results = 50, page_token = NULL,
   region_code = NULL, safe_search = "none", ...)
 }
 \arguments{
-\item{video_id}{string; Required.  Video ID from YouTube.}
+\item{video_id}{Character; Required.  Video ID from YouTube.}
 
-\item{max_results}{Maximum number of items that should be returned. Integer. Optional. Can be between 1 and 50. Default is 50.}
+\item{max_results}{Integer. Maximum number of items that should be returned. Integer. Optional. Can be between 1 and 50. Default is 50.}
 
-\item{page_token}{Specific page in the result set that should be returned. Optional.}
+\item{page_token}{Character. Specific page in the result set that should be returned. Optional.}
 
-\item{region_code}{string.  Return search results for a specified country.  ISO 3166-1 alpha-2 country code.  Optional.}
+\item{region_code}{Character.   Return search results for a specified country.  ISO 3166-1 alpha-2 country code.  Optional.}
 
 \item{safe_search}{Character. Optional. Takes one of three values: \code{'moderate'}, \code{'none'} (default) or \code{'strict'}
 If none, search result not filtered.  If moderate, search result filtered for content restricted within your locale.
@@ -26,7 +26,7 @@ If strict, search result filtered to exclude all restricted content from the sea
 Nested named list.
 }
 \description{
-Basic function, adapted from tuber package, get_related_videos()
+Basic function, adapted from tuber package, get_related_videos().
 Used by other related videos functions in the ytcol package.  Getting related videos
 is considered a search to the YouTube API.
 }

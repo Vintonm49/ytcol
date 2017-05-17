@@ -7,12 +7,12 @@
 yt.SingleVideoInfo(video_id = NULL)
 }
 \arguments{
-\item{video_id}{String.  Video ID from YouTube.}
+\item{video_id}{Character.  Video ID from YouTube. Required.}
 }
 \value{
-Dataframe with the following variables: videoID, viewCount, like Count, dislikeCount,
+Dataframe with the following variables: \code{videoID, viewCount, like Count, dislikeCount,
 favoriteCount, commentCount, pullDate, dateTime, channelID, title, description, tags,
-liveBroadcastContent, localized.title, localized.description
+liveBroadcastContent, localized.title, localized.description}
 }
 \description{
 This function combines the stats and details functions

@@ -7,11 +7,12 @@
 yt.VideoComments(video_id = NULL)
 }
 \arguments{
-\item{video_id}{String.  Video ID from YouTube.}
+\item{video_id}{Character.  Video ID from YouTube. Required.}
 }
 \value{
-Dataframe with variables including author information, comment text, date-time posted,
-and date-time updated.
+Dataframe with variables including: \code{comment_ID, video_ID, author_display_name, author_channel_ID,
+text_display, text_original, dateTime, updated_dateTime, reply_count, parent_comment_ID, parent_author_display_name,
+parent_author_channel_ID, pullDate}
 }
 \description{
 This function collects all the comments on a video on YouTube.
