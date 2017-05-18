@@ -79,10 +79,6 @@ yt_check <-
 yt.GetChannelID <- function(term = term,  ...){
   if (!is.character(term)) stop("Must specify a search term.\n")
 
-  if (max_results < 0 | max_results > 50) {
-    stop("max_results only takes a value between 0 and 50.")
-  }
-
   #for queries with spaces
   format_term <- paste0(unlist(strsplit(term, " ")), collapse = "%20")
 
