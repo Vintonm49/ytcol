@@ -1,6 +1,6 @@
 ---
-author: "LTC Melanie Vinton"
-date: "March 16, 2017"
+author: "Melanie Vinton"
+
 ---
 
 # ARGOS - YouTube
@@ -95,7 +95,8 @@ bubba_rel_comments <- yt.RelatedVideoComments(video_id = "tgchTz8XjrI")
 ```
 
 ###yt.Network()
-This function generates a network diagram using the dataframe produced by the *yt.RelatedVideoComments()* function.  The nodes are videos and comment authors. The links represent the fact that an author has commented at least once on the video.  The minVideos parameter allows the user to reduce the size of the network by filtering for authors who commented on more than one video by setting that parameter to a number greater than 1.  The output is a network diagram in the RStudio environment.
+This function generates a network diagram using a dataframe of that includes unique comment IDs, comment authors, and video IDs.  The dataframe must have columns named "comment_ID", "author_display_name", and "video_ID".
+The dataframes created with the *yt.ChannelComments()* and *yt.RelatedVideoComments()* functions work well in this function. The nodes are videos and comment authors. The links represent the fact that an author has commented at least once on the video.  The minVideos parameter allows the user to reduce the size of the network by filtering for authors who commented on more than one video by setting that parameter to a number greater than 1.  The output is a network diagram in the RStudio environment.
 ```{r eval = FALSE}
 yt.Network(relatedComments = bubba_rel_comments, minVideos = 7)
 ```
