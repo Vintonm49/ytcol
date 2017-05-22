@@ -72,7 +72,7 @@ yt.VideoComments <- function(video_id = NULL){
   com_token <- comment2$nextPageToken
   if(is.null(com_token)){
     ##Get replies to comments if they exist
-    comment22 <- dataframeFromJSON(comment2$items)
+    comment22 <- ytcol::dataframeFromJSON(comment2$items)
     comment22$snippet.totalReplyCount <- as.numeric(levels(comment22$snippet.totalReplyCount))[comment22$snippet.totalReplyCount]
     if(sum(comment22$snippet.totalReplyCount) > 0){
       reply<- subset(comment22, snippet.totalReplyCount > 0)  ## set of comments that have replies
@@ -107,7 +107,7 @@ yt.VideoComments <- function(video_id = NULL){
                                  "snippet.totalReplyCount")]
       names(comment222) <- c("comment_ID", "video_ID", "author_display_name","author_channel_ID","text_display",
                              "text_original","dateTime", "updated_dateTime", "reply_count")
-      comments_combo <- smartbind(comment222,replydf_join)
+      comments_combo <- gtools::smartbind(comment222,replydf_join)
       comments_combo$pullDate <- Sys.time()
       comments_combo$text_original <- gsub('\n'," ", comments_combo$text_original)  #replace breaklines with space.
       comments_combo$text_display <- gsub('\n'," ", comments_combo$text_display)
@@ -117,7 +117,7 @@ yt.VideoComments <- function(video_id = NULL){
       #write.csv(comments_combo, file=paste("./yt_collection/","comments_",video_id,"_!_",date,".csv", sep = ""), row.names = FALSE)
       return(comments_combo)
     }else{  #number of replies is zero and token is NULL
-      comment22 <- dataframeFromJSON(comment2$items)
+      comment22 <- ytcol::dataframeFromJSON(comment2$items)
       comment22$snippet.totalReplyCount <- as.numeric(levels(comment22$snippet.totalReplyCount))[comment22$snippet.totalReplyCount]
       comment222 <- comment22[,c("id","snippet.videoId","snippet.topLevelComment.snippet.authorDisplayName","snippet.topLevelComment.snippet.authorChannelId.value",
                                  "snippet.topLevelComment.snippet.textDisplay","snippet.topLevelComment.snippet.textOriginal",
@@ -140,8 +140,8 @@ yt.VideoComments <- function(video_id = NULL){
       comment1_sub <- ytcol::yt.GetComments(filter=c(video_id = video_id), page_token = com_token)
       comment2_sub <- ytcol::yt.GetComments(filter=c(video_id = video_id), page_token = com_token,
                                             simplify=FALSE)
-      comment22 <- dataframeFromJSON(comment2$items)
-      comment22_sub <- dataframeFromJSON(comment2_sub$items)
+      comment22 <- ytcol::dataframeFromJSON(comment2$items)
+      comment22_sub <- ytcol::dataframeFromJSON(comment2_sub$items)
       comment1 <- gtools::smartbind(comment1, comment1_sub)
       comment22 <- gtools::smartbind(comment22, comment22_sub)
       com_token <- comment2_sub$nextPageToken
@@ -164,7 +164,7 @@ yt.VideoComments <- function(video_id = NULL){
     replydf<-data.frame()
     for (i in list_of_parent_ids) {
       comreply <- try(ytcol::yt.GetCommentReply(filter = c(parent_ID = i)))  ##max results is 100, get pageToken (check with sum(reply$reply_count))
-      comreply <- dataframeFromJSON(comreply$items)
+      comreply <- ytcol::dataframeFromJSON(comreply$items)
       replydf <- rbind(replydf, comreply)
     }
     replydf <- replydf[,c("id","snippet.authorDisplayName","snippet.authorChannelId.value",
@@ -185,7 +185,7 @@ yt.VideoComments <- function(video_id = NULL){
                                "snippet.totalReplyCount")]
     names(comment222) <- c("comment_ID", "video_ID", "author_display_name","author_channel_ID","text_display",
                            "text_original","dateTime", "updated_dateTime", "reply_count")
-    comments_combo <- smartbind(comment222,replydf_join)
+    comments_combo <- gtools::smartbind(comment222,replydf_join)
     comments_combo$pullDate <- Sys.time()
     comments_combo$text_original <- gsub('\n'," ", comments_combo$text_original)  #replace breaklines with space.
     comments_combo$text_display <- gsub('\n'," ", comments_combo$text_display)
@@ -196,7 +196,7 @@ yt.VideoComments <- function(video_id = NULL){
     #write.csv(comments_combo, file=paste("./yt_collection/","comments_",video_id,"_!_",date,".csv", sep = ""), row.names = FALSE)
     return(comments_combo)
   }else{
-    comment22 <- dataframeFromJSON(comment2$items)
+    comment22 <- ytcol::dataframeFromJSON(comment2$items)
     comment22$snippet.totalReplyCount <- as.numeric(levels(comment22$snippet.totalReplyCount))[comment22$snippet.totalReplyCount]
     comment222 <- comment22[,c("id","snippet.videoId","snippet.topLevelComment.snippet.authorDisplayName","snippet.topLevelComment.snippet.authorChannelId.value",
                                "snippet.topLevelComment.snippet.textDisplay","snippet.topLevelComment.snippet.textOriginal",
@@ -236,7 +236,7 @@ yt.SimpleVideoComments <- function(video_id = NULL){
   com_token <- comment2$nextPageToken
   if(is.null(com_token)){
     ##Get replies to comments if they exist
-    comment22 <- dataframeFromJSON(comment2$items)
+    comment22 <- ytcol::dataframeFromJSON(comment2$items)
     comment22$snippet.totalReplyCount <- as.numeric(levels(comment22$snippet.totalReplyCount))[comment22$snippet.totalReplyCount]
     if(sum(comment22$snippet.totalReplyCount) > 0){
       reply<- subset(comment22, snippet.totalReplyCount > 0)  ## set of comments that have replies
@@ -271,7 +271,7 @@ yt.SimpleVideoComments <- function(video_id = NULL){
                                  "snippet.totalReplyCount")]
       names(comment222) <- c("comment_ID", "video_ID", "author_display_name","author_channel_ID","text_display",
                              "text_original","dateTime", "updated_dateTime", "reply_count")
-      comments_combo <- smartbind(comment222,replydf_join)
+      comments_combo <- gtools::smartbind(comment222,replydf_join)
       comments_combo$pullDate <- Sys.time()
       comments_combo$text_original <- gsub('\n'," ", comments_combo$text_original)  #replace breaklines with space.
       comments_combo$text_display <- gsub('\n'," ", comments_combo$text_display)
@@ -279,7 +279,7 @@ yt.SimpleVideoComments <- function(video_id = NULL){
       comments_combo$text_display <- gsub('<br />'," ", comments_combo$text_display)
       return(comments_combo)
     }else{  #number of replies is zero and token is NULL
-      comment22 <- dataframeFromJSON(comment2$items)
+      comment22 <- ytcol::dataframeFromJSON(comment2$items)
       comment22$snippet.totalReplyCount <- as.numeric(levels(comment22$snippet.totalReplyCount))[comment22$snippet.totalReplyCount]
       comment222 <- comment22[,c("id","snippet.videoId","snippet.topLevelComment.snippet.authorDisplayName","snippet.topLevelComment.snippet.authorChannelId.value",
                                  "snippet.topLevelComment.snippet.textDisplay","snippet.topLevelComment.snippet.textOriginal",
@@ -300,8 +300,8 @@ yt.SimpleVideoComments <- function(video_id = NULL){
       comment1_sub <- ytcol::yt.GetComments(filter=c(video_id = video_id), page_token = com_token)
       comment2_sub <- ytcol::yt.GetComments(filter=c(video_id = video_id), page_token = com_token,
                                             simplify=FALSE)
-      comment22 <- dataframeFromJSON(comment2$items)
-      comment22_sub <- dataframeFromJSON(comment2_sub$items)
+      comment22 <- ytcol::dataframeFromJSON(comment2$items)
+      comment22_sub <- ytcol::dataframeFromJSON(comment2_sub$items)
       comment1 <- gtools::smartbind(comment1, comment1_sub)
       comment22 <- gtools::smartbind(comment22, comment22_sub)
       com_token <- comment2_sub$nextPageToken
@@ -324,7 +324,7 @@ yt.SimpleVideoComments <- function(video_id = NULL){
     replydf<-data.frame()
     for (i in list_of_parent_ids) {
       comreply <- try(ytcol::yt.GetCommentReply(filter = c(parent_ID = i)))  ##max results is 100, get pageToken (check with sum(reply$reply_count))
-      comreply <- dataframeFromJSON(comreply$items)
+      comreply <- ytcol::dataframeFromJSON(comreply$items)
       replydf <- rbind(replydf, comreply)
     }
     replydf <- replydf[,c("id","snippet.authorDisplayName","snippet.authorChannelId.value",
@@ -345,7 +345,7 @@ yt.SimpleVideoComments <- function(video_id = NULL){
                                "snippet.totalReplyCount")]
     names(comment222) <- c("comment_ID", "video_ID", "author_display_name","author_channel_ID","text_display",
                            "text_original","dateTime", "updated_dateTime", "reply_count")
-    comments_combo <- smartbind(comment222,replydf_join)
+    comments_combo <- gtools::smartbind(comment222,replydf_join)
     comments_combo$pullDate <- Sys.time()
     comments_combo$text_original <- gsub('\n'," ", comments_combo$text_original)  #replace breaklines with space.
     comments_combo$text_display <- gsub('\n'," ", comments_combo$text_display)
@@ -353,7 +353,7 @@ yt.SimpleVideoComments <- function(video_id = NULL){
     comments_combo$text_display <- gsub('<br />'," ", comments_combo$text_display)
     return(comments_combo)
   }else{
-    comment22 <- dataframeFromJSON(comment2$items)
+    comment22 <- ytcol::dataframeFromJSON(comment2$items)
     comment22$snippet.totalReplyCount <- as.numeric(levels(comment22$snippet.totalReplyCount))[comment22$snippet.totalReplyCount]
     comment222 <- comment22[,c("id","snippet.videoId","snippet.topLevelComment.snippet.authorDisplayName","snippet.topLevelComment.snippet.authorChannelId.value",
                                "snippet.topLevelComment.snippet.textDisplay","snippet.topLevelComment.snippet.textOriginal",
@@ -407,7 +407,7 @@ yt.ChannelComments <- function(channel_id=NULL, published_before=NULL, published
 
   if(nrow(df) < 50){  # if equal to 50, there are more videos on the channel (max return hit)
     colnames(df)[which(colnames(df)=='contentDetails.upload.videoId')] <- "videoID"
-    df <- distinct(df, videoID, .keep_all = TRUE)
+    df <- dplyr::distinct(df, videoID, .keep_all = TRUE)
     df <- na.omit(df)
     list_of_video_ids <- as.character(df$videoID)
     comdf<-data.frame()
@@ -455,7 +455,7 @@ yt.ChannelComments <- function(channel_id=NULL, published_before=NULL, published
     }
   }
   colnames(df)[which(colnames(df)=='contentDetails.upload.videoId')] <- "videoID" #only need if col=4
-  df <- distinct(df,videoID)
+  df <- dplyr::distinct(df,videoID)
   list_of_video_ids <- as.character(df$videoID)
   comdf<-data.frame()
   for (i in list_of_video_ids) {
