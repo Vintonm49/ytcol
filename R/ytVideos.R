@@ -70,7 +70,7 @@ yt.SingleVideoInfo <- function(video_id=NULL){
 #' @export
 yt.Related <- function(video_id){
   df <- ytcol::yt.GetRelated(video_id = video_id)
-  dff <- dataframeFromJSON(df$items)
+  dff <- ytcol::dataframeFromJSON(df$items)
   rel_token <- df$nextPageToken
   if(is.null(rel_token)){  #less than 50 related videos
     dff <- dff[,-c(1,2,3,9:17,19)]
@@ -82,7 +82,7 @@ yt.Related <- function(video_id){
   } else {  #more then 50 related videos
     repeat{
       df2 <- ytcol::yt.GetRelated(video_id = video_id, page_token = rel_token)
-      df22 <- dataframeFromJSON(df2$items)
+      df22 <- ytcol::dataframeFromJSON(df2$items)
       if(nrow(df22)==0){
         break
       }

@@ -78,6 +78,12 @@ yt.Network <- function(relatedComments = NULL, minVideos = 1){
 #' @export
 yt.CommentsOverTime <- function(videoComments = NULL, note = "", breakBy = "day"){
 
+  is.installed <- function(mypkg) is.element(mypkg, installed.packages()[,1])
+  if (is.installed(mypkg = "ggplot2")==FALSE) {
+    stop("ggplot2 package is not installed")
+  }
+  require(ggplot2)
+
   if(!(breakBy %in% c("day","week","month","quarter","year"))){
     stop("breakBy can only take the values: day, week, month, quarter, or year")
   }
