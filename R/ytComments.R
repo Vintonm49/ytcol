@@ -85,8 +85,8 @@ yt.VideoComments <- function(video_id = NULL){
       list_of_parent_ids <- as.character(reply$parent_comment_ID)
       replydf<-data.frame()
       for (i in list_of_parent_ids) {  #get replies to comments that have replies
-        comreply <- try(yt.GetCommentReply(filter = c(parent_ID = i)))  ##max results is 100, get pageToken (check with sum(reply$reply_count))
-        comreply <- dataframeFromJSON(comreply$items)
+        comreply <- try(ytcol::yt.GetCommentReply(filter = c(parent_ID = i)))  ##max results is 100, get pageToken (check with sum(reply$reply_count))
+        comreply <- ytcol::dataframeFromJSON(comreply$items)
         replydf <- rbind(replydf, comreply)
       }
       replydf <- replydf[,c("id","snippet.authorDisplayName","snippet.authorChannelId.value",
@@ -250,7 +250,7 @@ yt.SimpleVideoComments <- function(video_id = NULL){
       replydf<-data.frame()
       for (i in list_of_parent_ids) {  #get replies to comments that have replies
         comreply <- try(ytcol::yt.GetCommentReply(filter = c(parent_ID = i)))  ##max results is 100, get pageToken (check with sum(reply$reply_count))
-        comreply <- dataframeFromJSON(comreply$items)
+        comreply <- ytcol::dataframeFromJSON(comreply$items)
         replydf <- rbind(replydf, comreply)
       }
       replydf <- replydf[,c("id","snippet.authorDisplayName","snippet.authorChannelId.value",

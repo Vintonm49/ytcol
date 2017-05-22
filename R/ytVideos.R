@@ -7,7 +7,7 @@
 #' commentCount, pullDate}
 #' @export
 getVideoStatsDF <- function(video_id){
-  stats <- as.data.frame(get_stats(video_id))
+  stats <- as.data.frame(tuber::get_stats(video_id))
   stats$pullDate <- Sys.time()
   return(stats)
 }
@@ -24,7 +24,7 @@ getVideoStatsDF <- function(video_id){
 #' thumbnail data, tags, categoryId, liveBroadcastContent, localized.title, localized.description}
 #' @export
 getVideoDetailsDF <- function(video_id){
-  details <- get_video_details(video_id)
+  details <- tuber::get_video_details(video_id)
   return(data.frame(t(unlist(details))))
 }
 

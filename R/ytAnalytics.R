@@ -18,8 +18,8 @@
 #' @export
 yt.Network <- function(relatedComments = NULL, minVideos = 1){
   edge <- relatedComments[,c("author_display_name","video_ID")]
-  edge_counts <- dplyr::summarise(group_by(edge, author_display_name, video_ID), count = n())  # number of comments by user on single video
-  SumByDisplayName <- dplyr::summarise(group_by(relatedComments,author_display_name),
+  edge_counts <- dplyr::summarise(dplyr::group_by(edge, author_display_name, video_ID), count = n())  # number of comments by user on single video
+  SumByDisplayName <- dplyr::summarise(dplyr::group_by(relatedComments,author_display_name),
                                 numComments = n_distinct(comment_ID), numVids = n_distinct(video_ID))
   SumByDisplayName <- dplyr::arrange(SumByDisplayName, desc(numVids))
   if(minVideos > max(SumByDisplayName$numVids)) {
@@ -28,7 +28,7 @@ yt.Network <- function(relatedComments = NULL, minVideos = 1){
   multi_vids <- subset(SumByDisplayName, numVids >= minVideos)  #select only users with comments on at least x videos
   multi_edge <- dplyr::semi_join(edge,multi_vids, by = "author_display_name")  #pair subset of authors with videos they comment on
   multi_edge_distinct <- dplyr::distinct(multi_edge)
-  multi_edge_count <- dplyr::summarise(group_by(multi_edge,author_display_name), countVids = n())
+  multi_edge_count <- dplyr::summarise(dplyr::group_by(multi_edge,author_display_name), countVids = n())
   my_nodes <- as.character(unique(multi_edge_distinct$author_display_name))
   my_vids <- as.character(unique(multi_edge_distinct$video_ID))
   nodes <- data.frame(name = unique(c(my_nodes, my_vids)), stringsAsFactors = FALSE)
