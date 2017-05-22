@@ -1,10 +1,9 @@
 #' Create a dataframe from JSON
 #'
-#' This function converts the JSON provided by the YouTube API from the list_channel_activities
-#' function in the tuber package when the part parameter is set to "contentDetails".  The goal is to
-#' capture the video IDs from the channel.
+#' This function converts the JSON provided by the YouTube API to a dataframe.  Utilized
+#' by multiple other functions in the ytcol package.
 #'
-#' @param l Dataframe$items from the list_channel_activities()
+#' @param l Dataframe$items
 #' @return A dataframe of the items
 #' @export
 dataframeFromJSON <- function(l) {
@@ -20,8 +19,9 @@ dataframeFromJSON <- function(l) {
 }
 
 
-#'Check if authenitication token is in options.
-#'From the tuber package, original function not exported.
+#'Check for Authenitication Token in Options.
+#'
+#'Supports the yt_GET function in the ytcol package.  From the tuber package, original function not exported.
 #'@export
 yt_check_token <- function() {
 
@@ -32,8 +32,9 @@ yt_check_token <- function() {
 
 
 #' Base GET function.
+#'
 #' From the tuber package, but not exported.
-#' #' @param path path to specific API request URL
+#' @param path path to specific API request URL
 #' @param query query list
 #' @param \dots Additional arguments passed to \code{\link[httr]{GET}}.
 #' @return list
@@ -52,10 +53,12 @@ yt_GET <-
   }
 
 #' Request Response Verification.
-#' From the tuber package, but not exported.
+#'
+#'
+#' Supports the yt_GET function in the ytcol package.  From the tuber package, but not exported.
 #'
 #' @param req Request
-#' @return in case of failure, a message
+#' @return In case of failure, a message.
 #' @export
 yt_check <-
   function(req) {
@@ -97,7 +100,7 @@ yt.GetChannelID <- function(term = term,  ...){
   }
 }
 
-#' Paste columns in a dataframe and suppress NAs
+#' Paste Columns in a Dataframe and Suppress NAs
 #'
 #' The function suppresses NAs when pasting columns together
 #' in a data frame.

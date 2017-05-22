@@ -2,12 +2,10 @@
 % Please edit documentation in R/ytUtility.R
 \name{yt_check_token}
 \alias{yt_check_token}
-\title{Check if authenitication token is in options.
-From the tuber package, original function not exported.}
+\title{Check for Authenitication Token in Options.}
 \usage{
 yt_check_token()
 }
 \description{
-Check if authenitication token is in options.
-From the tuber package, original function not exported.
+Supports the yt_GET function in the ytcol package.  From the tuber package, original function not exported.
 }

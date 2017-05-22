@@ -2,8 +2,7 @@
 % Please edit documentation in R/ytUtility.R
 \name{yt_check}
 \alias{yt_check}
-\title{Request Response Verification.
-From the tuber package, but not exported.}
+\title{Request Response Verification.}
 \usage{
 yt_check(req)
 }
@@ -11,9 +10,8 @@ yt_check(req)
 \item{req}{Request}
 }
 \value{
-in case of failure, a message
+In case of failure, a message.
 }
 \description{
-Request Response Verification.
-From the tuber package, but not exported.
+Supports the yt_GET function in the ytcol package.  From the tuber package, but not exported.
 }

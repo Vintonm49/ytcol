@@ -5,11 +5,11 @@
 #' Used by other comment functions in the ytcol package.
 #'
 #' @param filter Character; Required.
-#' named vector of length 1
-#' potential names of the entry in the vector:
+#' named vector of length 1.
+#' Potential names of the entry in the vector:
 #' \code{video_id}: video ID.
 #' \code{channel_id}: channel ID.
-#' \code{thread_id}: comma-separated list of comment thread IDs
+#' \code{thread_id}: comma-separated list of comment thread IDs.
 #' \code{threads_related_to_channel}: channel ID.
 #'
 #' @param part  Character. Comment resource requested. Required. Comma separated list of one or more of the
@@ -18,7 +18,7 @@
 #' @param page_token  Character. Specific page in the result set that should be returned. Optional.
 #' @param text_format Character. Default is \code{"html"}. Only takes \code{"html"} or \code{"plainText"}. Optional.
 #' @param simplify Boolean. Default is \code{TRUE}. If \code{TRUE}, the function returns a data frame. Else a list with all the information returned.
-#' @param \dots Additional arguments passed to \code{\link{tuber_GET}}.
+#' @param \dots Additional arguments passed to \code{\link{yt_GET}}.
 #' @return Nested named list.
 #' @export
 #'
@@ -481,8 +481,8 @@ yt.ChannelComments <- function(channel_id=NULL, published_before=NULL, published
 #' Used by other comment functions in the ytcol package.
 #'
 #' @param filter Character; Required.
-#' named vector of length 1
-#' potential names of the entry in the vector:
+#' named vector of length 1.
+#' Potential names of the entry in the vector:
 #' \code{comment_ID}: comment ID.
 #' \code{parent_ID}: parent comment ID.
 #' @param part  Character. Comment resource requested. Required. Comma separated list of one or more of the
@@ -490,7 +490,7 @@ yt.ChannelComments <- function(channel_id=NULL, published_before=NULL, published
 #' @param max_results  Integer. Maximum number of items that should be returned. Integer. Optional. Can be between 20 and 100. Default is 100.
 #' @param page_token  Character. Specific page in the result set that should be returned. Optional.
 #' @param text_format Character. Default is \code{"html"}. Only takes \code{"html"} or \code{"plainText"}. Optional.
-#' @param \dots Additional arguments passed to \code{\link{tuber_GET}}.
+#' @param \dots Additional arguments passed to \code{\link{yt_GET}}.
 #' @return Nested named list.
 #' @export
 #'

@@ -2,7 +2,7 @@
 % Please edit documentation in R/ytUtility.R
 \name{pasteNA}
 \alias{pasteNA}
-\title{Paste columns in a dataframe and suppress NAs}
+\title{Paste Columns in a Dataframe and Suppress NAs}
 \usage{
 pasteNA(..., sep = " ", collapse = NULL, na.rm = F)
 }

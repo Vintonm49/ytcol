@@ -2,13 +2,13 @@
 % Please edit documentation in R/ytUtility.R
 \name{yt_GET}
 \alias{yt_GET}
-\title{Base GET function.
-From the tuber package, but not exported.
-#' @param path path to specific API request URL}
+\title{Base GET function.}
 \usage{
 yt_GET(path, query, ...)
 }
 \arguments{
+\item{path}{path to specific API request URL}
+
 \item{query}{query list}
 
 \item{\dots}{Additional arguments passed to \code{\link[httr]{GET}}.}
@@ -17,7 +17,5 @@ yt_GET(path, query, ...)
 list
 }
 \description{
-Base GET function.
 From the tuber package, but not exported.
-#' @param path path to specific API request URL
 }

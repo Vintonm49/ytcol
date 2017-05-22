@@ -20,6 +20,7 @@ yt.Search(term = NULL, published_before = NULL, published_after = NULL,
 A dataframe with 6 variables: \code{video_ID, dateTime, channel_ID, title, description, channel_title}
 }
 \description{
-This function makes use of the yt_search function in the tuber package.
-and pulls all videos for the set term within the set date range.
+This function makes use of the yt.GetSearch function in the ytcol package
+and pulls videos for the set term within the set date range.  The number of videos
+returned is set with the max_results parameter.
 }

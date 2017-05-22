@@ -114,7 +114,7 @@ yt.Related <- function(video_id){
 #' @param safe_search  Character. Optional. Takes one of three values: \code{'moderate'}, \code{'none'} (default) or \code{'strict'}
 #' If none, search result not filtered.  If moderate, search result filtered for content restricted within your locale.
 #' If strict, search result filtered to exclude all restricted content from the search result set.
-#' @param \dots Additional arguments passed to \code{\link{tuber_GET}}.
+#' @param \dots Additional arguments passed to \code{\link{yt_GET}}.
 #' @return Nested named list.
 #' @export
 yt.GetRelated <- function (video_id = NULL, max_results = 50, page_token = NULL, region_code = NULL, safe_search = "none", ...){

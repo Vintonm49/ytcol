@@ -9,11 +9,11 @@ yt.GetComments(filter = NULL, part = "snippet", text_format = "html",
 }
 \arguments{
 \item{filter}{Character; Required.
-named vector of length 1
-potential names of the entry in the vector:
+named vector of length 1.
+Potential names of the entry in the vector:
 \code{video_id}: video ID.
 \code{channel_id}: channel ID.
-\code{thread_id}: comma-separated list of comment thread IDs
+\code{thread_id}: comma-separated list of comment thread IDs.
 \code{threads_related_to_channel}: channel ID.}
 
 \item{part}{Character. Comment resource requested. Required. Comma separated list of one or more of the
@@ -27,7 +27,7 @@ following: \code{id, snippet}. e.g., \code{"id, snippet"}, \code{"id"}, etc. Def
 
 \item{page_token}{Character. Specific page in the result set that should be returned. Optional.}
 
-\item{\dots}{Additional arguments passed to \code{\link{tuber_GET}}.}
+\item{\dots}{Additional arguments passed to \code{\link{yt_GET}}.}
 }
 \value{
 Nested named list.

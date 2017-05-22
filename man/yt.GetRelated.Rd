@@ -20,7 +20,7 @@ yt.GetRelated(video_id = NULL, max_results = 50, page_token = NULL,
 If none, search result not filtered.  If moderate, search result filtered for content restricted within your locale.
 If strict, search result filtered to exclude all restricted content from the search result set.}
 
-\item{\dots}{Additional arguments passed to \code{\link{tuber_GET}}.}
+\item{\dots}{Additional arguments passed to \code{\link{yt_GET}}.}
 }
 \value{
 Nested named list.

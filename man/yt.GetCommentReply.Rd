@@ -9,8 +9,8 @@ yt.GetCommentReply(filter = NULL, part = "snippet", text_format = "html",
 }
 \arguments{
 \item{filter}{Character; Required.
-named vector of length 1
-potential names of the entry in the vector:
+named vector of length 1.
+Potential names of the entry in the vector:
 \code{comment_ID}: comment ID.
 \code{parent_ID}: parent comment ID.}
 
@@ -23,7 +23,7 @@ following: \code{id, snippet}. e.g., \code{"id, snippet"}, \code{"id"}, etc. Def
 
 \item{page_token}{Character. Specific page in the result set that should be returned. Optional.}
 
-\item{\dots}{Additional arguments passed to \code{\link{tuber_GET}}.}
+\item{\dots}{Additional arguments passed to \code{\link{yt_GET}}.}
 }
 \value{
 Nested named list.

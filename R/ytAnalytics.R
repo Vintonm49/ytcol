@@ -1,9 +1,10 @@
 #' Network Diagram for Comments on Related Videos
 #'
 #'
-#' This function takes the dataframe created with the yt.RelatedVideoComments() function
-#' and generates a network diagram with the nodes being comment authors and videos.
-#' The size of the nodes for comment authors indicates the relative number of videos
+#' This function takes the dataframe and generates a network diagram with the nodes being comment authors and videos.
+#' The dataframe must have columns named "comment_ID", "author_display_name", and "video_ID".
+#' The dataframes created with the yt.ChannelComments() and yt.RelatedVideoComments() functions
+#' work well in this function.  The size of the nodes for comment authors indicates the relative number of videos
 #' that author has commented on in the original set of related videos.  The function subsets the
 #' related video comments dataframe by authors that have commented on at least the minimum
 #' number of videos, so as to focus on authors who have commented on multiple videos as more

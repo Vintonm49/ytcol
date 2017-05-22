@@ -7,13 +7,12 @@
 dataframeFromJSON(l)
 }
 \arguments{
-\item{l}{Dataframe$items from the list_channel_activities()}
+\item{l}{Dataframe$items}
 }
 \value{
 A dataframe of the items
 }
 \description{
-This function converts the JSON provided by the YouTube API from the list_channel_activities
-function in the tuber package when the part parameter is set to "contentDetails".  The goal is to
-capture the video IDs from the channel.
+This function converts the JSON provided by the YouTube API to a dataframe.  Utilized
+by multiple other functions in the ytcol package.
 }
