@@ -95,14 +95,14 @@ This function collects all the comments, including replies, on a video and the v
 bubba_rel_comments <- yt.RelatedVideoComments(video_id = "tgchTz8XjrI")
 ```
 
-###yt.Network()
+### yt.Network()
 This function generates a network diagram using a dataframe of that includes unique comment IDs, comment authors, and video IDs.  The dataframe must have columns named "comment_ID", "author_display_name", and "video_ID".
 The dataframes created with the *yt.ChannelComments()* and *yt.RelatedVideoComments()* functions work well in this function. The nodes are videos and comment authors. The links represent the fact that an author has commented at least once on the video.  The minVideos parameter allows the user to reduce the size of the network by filtering for authors who commented on more than one video by setting that parameter to a number greater than 1.  The output is a network diagram in the RStudio environment.
 ```{r eval = FALSE}
 yt.Network(relatedComments = bubba_rel_comments, minVideos = 7)
 ```
 
-###yt.CommentsOverTime()
+### yt.CommentsOverTime()
 This function generates two charts to visualize the distribution of comments on a video over time using the dataframe produced by the *yt.VideoComments()* function.  The videoComments parameter identifies the dataframe to use for the chart. The note parameter allows the user to make an annotation in the upper left corner of each chart.  The breakBy parameter sets the breaks in the date sequence on the x-axis and can take the values day, week, month, quarter, or year.   The first chart, called "Comments Over Time", shows the number of comments per day, and the second chart, called "Cumulative Comments Over Time", shows the sum of the number of comments on a video as time progresses.  
 ```{r eval = FALSE}
 yt.CommentsOverTime(videoComments = bubba_comments, note = "video ID: tgchTz8XjrI", breakBy = "quarter")
@@ -111,7 +111,7 @@ yt.CommentsOverTime(videoComments = bubba_comments, note = "video ID: tgchTz8Xjr
 
 ![](C:/Users/melanie.c.vinton/Documents/INSCOM/youTube/Cumulative Comments.png)
 
-###yt.Wordcloud()
+### yt.Wordcloud()
 This function generates a wordcloud from comments collected using one of the other functions in **ytcol**.  The input is a dataframe that must have a column named "text_original" that contains that comments.  The comments parameter is the dataframe in the environment that contains the comments.  The max-words paramenter sets the number of words to display in the wordcloud.  The remove parameter allows the users to eliminate some words for the wordcloud.  The stopwords parameter also eliminates common words, such as me or you, based on the language of the comments.  The default language is English.  
 ```{r eval = FALSE}
 yt.Wordcloud(comments = bubba_rel_comments, max_words = 50, remove = c('hes','thats','can','cant'))
