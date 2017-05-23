@@ -78,7 +78,6 @@ yt_check <-
 #'
 #' @param term  Character. Vanity name. Required.
 #' @export
-#' @example \dontrun{yt.GetChannelID(term = "CNN")}
 yt.GetChannelID <- function(term = term,  ...){
   if (!is.character(term)) stop("Must specify a search term.\n")
 

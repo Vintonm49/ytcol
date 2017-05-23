@@ -58,7 +58,6 @@ yt.GetComments <- function (filter=NULL, part="snippet", text_format="html", sim
 #' @return Dataframe with variables including: \code{comment_ID, video_ID, author_display_name, author_channel_ID,
 #' text_display, text_original, dateTime, updated_dateTime, reply_count, parent_comment_ID, parent_author_display_name,
 #' parent_author_channel_ID, pullDate}
-#' @example \dontrun {yt.VideoComments(video_id = "D69yJub7Uuo")}
 #' @export
 yt.VideoComments <- function(video_id = NULL){
   comment1 <- ytcol::yt.GetComments(filter=c(video_id = video_id))
@@ -379,8 +378,6 @@ yt.SimpleVideoComments <- function(video_id = NULL){
 #'@param channel_id  Character.  The YouTube channel ID.  Cannot be the vanity URL name. Required.
 #'@param published_before Date.  Optional. RFC 339 Format.  Example, "1970-01-01T00:00:00Z"
 #'@param published_after  Date.  Optional. RFC 339 Format.  Example, "1970-01-01T00:00:00Z"
-#'@example \dontrun{yt.ChannelComments(channel_id = "UCLRYsOHrkk5qcIhtq033bLQ", published_after = "2016-01-01T00:00:00Z",
-#'published_before = "2017-11-09T00:00:00Z")}
 #'@export
 yt.ChannelComments <- function(channel_id=NULL, published_before=NULL, published_after=NULL){
   channelAct <- tuber::list_channel_activities(filter=c(channel_id = channel_id) ,part = "contentDetails",

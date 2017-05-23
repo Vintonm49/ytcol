@@ -10,9 +10,9 @@ yt.CommentsOverTime(videoComments = NULL, note = "", breakBy = "day")
 \item{videoComments}{Dataframe object created with the yt.VideoComments() function.
 Must have the variables "author_display_name" and "dateTime".}
 
-\item{note}{A string to put a note on the chart, such as the video ID or some other reference.}
+\item{note}{Character.  A note to put on the chart, such as the video ID or some other reference.}
 
-\item{breakBy}{String.  Set the breaks in the date sequence on the x-axis.  Takes one of five values:
+\item{breakBy}{Character.  Set the breaks in the date sequence on the x-axis.  Takes one of five values:
 \code{'day','week','month','quarter','year'}}
 }
 \value{

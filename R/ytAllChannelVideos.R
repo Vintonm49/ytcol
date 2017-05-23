@@ -15,9 +15,7 @@
 #' viewCount, likeCount, dislikeCount, favoriteCount, commentCount, tags, categoryID, liveBroadcastContent,
 #' defaultLanguage, localized.title, localized.description, defaultAudioLanguage}
 #' @export
-#' @example
-#' yt.AllChannelVideos(channel_id = "UCLRYsOHrkk5qcIhtq033bLQ", published_before = "2016-11-09T00:00:00Z",
-#' published_after = "2016-01-01T00:00:00Z")
+
 yt.AllChannelVideos <- function(channel_id=NULL, published_before=NULL, published_after=NULL){
 
   channelAct <- tuber::list_channel_activities(filter=c(channel_id = channel_id) ,part = "contentDetails",

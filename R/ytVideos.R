@@ -66,7 +66,6 @@ yt.SingleVideoInfo <- function(video_id=NULL){
 #' @param video_id  Character.  Video ID from YouTube. Required.
 #' @return Dataframe with the following variables: \code{video_ID, dateTime, channel_ID, title, description,
 #' channel_title, and related_to}
-#' @example \dontrun{yt.Related(video_id = "0uY7gLZDmn4")}
 #' @export
 yt.Related <- function(video_id){
   df <- ytcol::yt.GetRelated(video_id = video_id)

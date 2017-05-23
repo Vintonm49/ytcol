@@ -15,7 +15,6 @@
 #' @param minVideos  Numeric for the minimum number of videos the author has commented on in the original set of related
 #' videos.  Default is 1. Subsets authors with equal to or greater than the minVideos numeric.
 #' @return Plots a network diagram with nodes being comment authors and video IDs.
-#' @example \dontrun{yt.Network(relatedComments = df, minVideos = 3)}
 #' @export
 yt.Network <- function(relatedComments = NULL, minVideos = 1){
   edge <- relatedComments[,c("author_display_name","video_ID")]
@@ -70,12 +69,11 @@ yt.Network <- function(relatedComments = NULL, minVideos = 1){
 #' comments on the video over time.
 #' @param videoComments  Dataframe object created with the yt.VideoComments() function.
 #' Must have the variables "author_display_name" and "dateTime".
-#' @param note  A string to put a note on the chart, such as the video ID or some other reference.
-#' @param breakBy  String.  Set the breaks in the date sequence on the x-axis.  Takes one of five values:
+#' @param note  Character.  A note to put on the chart, such as the video ID or some other reference.
+#' @param breakBy  Character.  Set the breaks in the date sequence on the x-axis.  Takes one of five values:
 #' \code{'day','week','month','quarter','year'}
 #' @return Plots two charts, a histogram showing comment density over time and a cumulative line for total
 #' comments over time.
-#' @example \dontrun{yt.CommentsOverTime(videoComments = df, note = "video name: abc", breakBy = "week")}
 #' @export
 yt.CommentsOverTime <- function(videoComments = NULL, note = "", breakBy = "day"){
 
@@ -121,4 +119,49 @@ yt.CommentsOverTime <- function(videoComments = NULL, note = "", breakBy = "day"
     annotate("text",x = minDate, y = totalMax-1, label = note, hjust = -.2)
 
   return(list(p1,p2))
+}
+
+
+#' Wordcloud of Comments from YouTube
+#'
+#' Create a wordcloud from a dataframe that includes the text of comments pulled
+#' from YouTube.  Input dataframe must have a column named "text_original" that contains
+#' the comments.
+#' @param comments  Character.  Name of dataframe in the environment that includes the comments in
+#' a column named "text_original".  Required.
+#' @param max_words  Integer.  Number of words to display in the wordcloud.  Default is 10.
+#' @param remove   Comma separated list of words to remove from the words displayed in the wordcloud.  Optional.
+#' @param stopwords  Character.  Stopwords are common words in a language such as “the” and “this”.  Set the langauge
+#' to eliminate common words in that language  Takes one of the following values:
+#' \code{'english','danish','dutch','finnish','french','german','hungarian', 'italian', 'norwegian', 'portuguese',
+#'  'russian', 'spanish', 'swedish'}.  Default is 'english'.
+#' @return  Plots a wordcloud.
+#' @export
+yt.Wordcloud <- function(comments = NULL, max_words = 10, remove = NULL, stopwords = "english"){
+  x <- as.vector(comments$text_original)
+  #remove words with non-ASCII characters
+  x2 <- unlist(strsplit(x,split = ", "))  #convert string to vector of words
+  x3 <- grep("x2", iconv(x2, "latin1", "ASCII", sub="x2"))  # find indices of words with non-ASCII characters
+  x4 <- x2[-x3] #subset original vector of words to exclued words with non-ASCII characters
+  x5 <- paste(x4, collapse = ", ") #convert back to string
+
+  TrimOddChar <- function(x){
+    #remove odd characters
+    iconv(x, to = 'UTF-8')
+  }
+
+  bubba_corpus <- tm::SimpleCorpus(tm::VectorSource(x5))
+  bubba_corpus <- tm::tm_map(bubba_corpus,TrimOddChar)
+  bubba_corpus <- tm::tm_map(bubba_corpus, tm::content_transformer(tolower))
+  bubba_corpus <- tm::tm_map(bubba_corpus, tm::removeNumbers)
+  bubba_corpus <- tm::tm_map(bubba_corpus, tm::removePunctuation)
+  bubba_corpus <- tm::tm_map(bubba_corpus, tm::removeWords, tm::stopwords(stopwords))
+  bubba_corpus <- tm::tm_map(bubba_corpus, tm::removeWords, remove)
+  #bubba_corpus <- tm_map(bubba_corpus, stemDocument)
+  ap.tdm <- tm::TermDocumentMatrix(bubba_corpus)
+  ap.m <- as.matrix(ap.tdm)
+  ap.v <- sort(rowSums(ap.m), decreasing = TRUE)
+  ap.d <- data.frame(word = names(ap.v), freq = ap.v)
+  table(ap.d$freq)
+  wordcloud::wordcloud(ap.d$word, ap.d$freq, max.words = max_words, random.order = FALSE, rot.per = .15)
 }

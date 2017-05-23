@@ -17,5 +17,7 @@ Imports: tuber,
     dplyr,
     httr,
     networkD3,
-    scales
+    scales,
+    tm,
+    wordcloud
 RoxygenNote: 6.0.1
