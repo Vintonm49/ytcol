@@ -111,3 +111,9 @@ yt.CommentsOverTime(videoComments = bubba_comments, note = "video ID: tgchTz8Xjr
 
 ![](C:/Users/melanie.c.vinton/Documents/INSCOM/youTube/Cumulative Comments.png)
 
+###yt.Wordcloud()
+This function generates a wordcloud from comments collected using one of the other functions in **ytcol**.  The input is a dataframe that must have a column named "text_original" that contains that comments.  The comments parameter is the dataframe in the environment that contains the comments.  The max-words paramenter sets the number of words to display in the wordcloud.  The remove parameter allows the users to eliminate some words for the wordcloud.  The stopwords parameter also eliminates common words, such as me or you, based on the language of the comments.  The default language is English.  
+```{r eval = FALSE}
+yt.Wordcloud(comments = bubba_rel_comments, max_words = 50, remove = c('hes','thats','can','cant'))
+```
+![](C:/Users/melanie.c.vinton/Documents/INSCOM/youTube/Bubba_wordcloud.png)
