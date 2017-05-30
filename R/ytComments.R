@@ -399,6 +399,7 @@ yt.ChannelComments <- function(channel_id=NULL, published_before=NULL, published
     df <- x3[,"videoID", drop = FALSE]
   } else {
     df <- df[,4, drop = FALSE]
+    colnames(df)[which(colnames(df)=='contentDetails.upload.videoId')] <- "videoID"
   }
   token <- channelAct$nextPageToken
 
@@ -444,6 +445,7 @@ yt.ChannelComments <- function(channel_id=NULL, published_before=NULL, published
 
     } else {
       dff <- dff[,4, drop = FALSE]
+      colnames(dff)[which(colnames(dff)=='contentDetails.upload.videoId')] <- "videoID" #only need if col=4
     }
     df <- gtools::smartbind(df, dff)
     token <- channelActSub$nextPageToken
