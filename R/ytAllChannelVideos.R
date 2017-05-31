@@ -41,10 +41,10 @@ yt.AllChannelVideos <- function(channel_id=NULL, published_before=NULL, publishe
 
   } else {
     df <- df[,4, drop = FALSE]
+    colnames(df)[which(colnames(df)=='contentDetails.upload.videoId')] <- "videoID"
   }
 
   token <- channelAct$nextPageToken
-  print(token)
 
   if(nrow(channelList) < 50){
     df<-cbind(df,channelList)
@@ -98,10 +98,11 @@ yt.AllChannelVideos <- function(channel_id=NULL, published_before=NULL, publishe
         }
       }
       dff <- x3[,"videoID", drop = FALSE]
-      dff <- unique(dff)
+      #dff <- unique(dff)
 
     } else {
       dff <- dff[,4, drop = FALSE]
+      colnames(df)[which(colnames(df)=='contentDetails.upload.videoId')] <- "videoID"
     }
     df <- gtools::smartbind(df, dff)
     channelList <- gtools::smartbind(channelList,channelListSub)
