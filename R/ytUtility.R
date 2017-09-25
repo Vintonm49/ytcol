@@ -134,3 +134,31 @@ pasteNA <- function(..., sep = " ", collapse = NULL, na.rm = F) {
 }
 
 
+#' Authentication to YouTube
+#' 
+#' The function looks for \code{.httr-oauth} in the working directory. If it doesn't find it, it expects an application ID and a secret.
+#'@param app_id client ID.  Required.
+#'@param app_secret  client secret. Required.
+#'@param scope  Character.  Default = "ssl".  Do not change.
+#'@param token  Path to file containing token.
+#'@param \dots Additional arguments
+#'@export 
+yt.oauth <- function (app_id = NULL, app_secret = NULL, scope = "ssl", token = ".httr-oauth", ...)  {
+  
+  if(file.exists(token)){
+    google_token <- try(suppressWarnings(readRDS(token)), silent = TRUE)
+    if(inherits(google_token, "try-error")){
+      stop(sprintf("Unable to read token from:%s", token))
+    }
+    google_token <- google_token[[1]]
+  }else if (is.null(app_id) | is.null(app_secret)) {
+    stop("Please provide values for app_id and app_secret")
+  } else {
+    myapp <- httr::oauth_app("google", key = app_id, secret = app_secret)
+    google_token <- oauth2.0_token(oauth_endpoints("google"), myapp, 
+                                   scope = "https://www.googleapis.com/auth/youtube.force-ssl", ...) 
+    
+  }
+  options(google_token=google_token)
+}
+  

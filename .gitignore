@@ -1,7 +1,5 @@
 .Rproj.user
 .Rhistory
 .RData
+.Ruserdata
 .httr-oauth
-.Rbuildignore
-ytcol.Rproj
-yt_collection/*

@@ -6,7 +6,7 @@ Description: Collect data from YouTube, organize and clean the data, and create 
     It makes use of the tuber package but simplifies for a specific user.
 URL: http://github.com/Vintonm49/ytcol
 BugReports: http://github.com/Vintonm49/ytcol/issues
-Depends: R (>= 3.3.2)
+Depends: R (>= 3.3.1)
 License: What license is it under?
 Encoding: UTF-8
 LazyData: true
@@ -20,4 +20,4 @@ Imports: tuber,
     scales,
     tm,
     wordcloud
-RoxygenNote: 6.0.1
+RoxygenNote: 6.0.1.9000

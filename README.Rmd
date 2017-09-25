@@ -12,19 +12,19 @@ This R package provides data collection, cleaning, and visualization for YouTube
 ```{r eval = FALSE}
 install.packages(c("tuber","plyr","gtools","ggplot2","dplyr","httr","networkD3","scales"))
 token <- "xxxxxx"
-devtools::install_github("Vintonm49/ytcol", auth_token = token)
+devtools::install_github("maelezo/ytcol", auth_token = token)
 ```
 
 
 ## Authentication
 The first step is to get authorization credentials for a Google App account, such as Gmail or YouTube, at <https://console.developers.google.com/projectselector/apis/credentials>.  You need to enable the YouTube APIs and the Freebase API.  When creating credentials for your project, select Oauth Client ID and application type "Other". For more details, see <https://developers.google.com/youtube/v3/getting-started>.
 
-Then you need to authenticate using the OAuth 2.0 credentials (client ID and client secret) with the YouTube API using the *yt_oauth* function in the **tuber** package.  The function looks for a \code{.httr-oauth} file in the working directory.  If that file is not in the working directory, it will try to authenticate with the client ID and secret by launching a browser to allow you to authorize the application.  This part of the process will not work from an AWS instance - you must have the correct file in the workind directory on AWS.  If you are working locally, you should select YES when asked if you want to save the httr-oauth file for later reference and click "Allow" on the browser to authorize the connection.
+Then you need to authenticate using the OAuth 2.0 credentials (client ID and client secret) with the YouTube API using the *yt.oauth* function.  The function looks for a \code{.httr-oauth} file in the working directory.  If that file is not in the working directory, it will try to authenticate with the client ID and secret by launching a browser to allow you to authorize the application.  This part of the process will not work from an AWS instance - you must have the correct file in the workind directory on AWS.  If you are working locally, you should select YES when asked if you want to save the httr-oauth file for later reference and click "Allow" on the browser to authorize the connection.
 
 ```{r eval=FALSE}
 client <- "xxxxxx"
 secret <- "yyyy"
-yt_oauth(client, secret)
+yt.oauth(client, secret)
 ```
 
 ## Outputs
@@ -107,9 +107,9 @@ This function generates two charts to visualize the distribution of comments on 
 ```{r eval = FALSE}
 yt.CommentsOverTime(videoComments = bubba_comments, note = "video ID: tgchTz8XjrI", breakBy = "quarter")
 ```
-![](C:/Users/melanie.c.vinton/Documents/INSCOM/youTube/Comments over Time.png)
+![](C:/Users/melanie.c.vinton/Documents/INSCOM/youTube/Comments_over_Time.png)
 
-![](C:/Users/melanie.c.vinton/Documents/INSCOM/youTube/Cumulative Comments.png)
+![](C:/Users/melanie.c.vinton/Documents/INSCOM/youTube/CumulativeComments.png)
 
 ### yt.Wordcloud()
 This function generates a wordcloud from comments collected using one of the other functions in **ytcol**.  The input is a dataframe that must have a column named "text_original" that contains that comments.  The comments parameter is the dataframe in the environment that contains the comments.  The max-words paramenter sets the number of words to display in the wordcloud.  The remove parameter allows the users to eliminate some words for the wordcloud.  The stopwords parameter also eliminates common words, such as me or you, based on the language of the comments.  The default language is English.  
