@@ -116,4 +116,4 @@ This function generates a wordcloud from comments collected using one of the oth
 ```{r eval = FALSE}
 yt.Wordcloud(comments = bubba_rel_comments, max_words = 50, remove = c('hes','thats','can','cant'))
 ```
-![](C:/Users/melanie.c.vinton/Documents/INSCOM/youTube/Bubba_wordcloud.png)
+![](C:/Users/melanie.c.vinton/Documents/INSCOM/youTube/ytcol/Bubba_wordcloud.png)
