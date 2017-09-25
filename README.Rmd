@@ -107,7 +107,7 @@ This function generates two charts to visualize the distribution of comments on 
 ```{r eval = FALSE}
 yt.CommentsOverTime(videoComments = bubba_comments, note = "video ID: tgchTz8XjrI", breakBy = "quarter")
 ```
-![](C:/Users/melanie.c.vinton/Documents/INSCOM/youTube/Comments_over_Time.png)
+![](Comments_over_Time.png)
 
 ![](C:/Users/melanie.c.vinton/Documents/INSCOM/youTube/CumulativeComments.png)
 
